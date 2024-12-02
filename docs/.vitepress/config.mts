@@ -7,6 +7,7 @@ export default defineConfig({
   description: "文档的基本描述",
   outDir: '../public',
   assetsDir: 'assets',
+  base: '/tcm-doc/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: '/logo.png',
