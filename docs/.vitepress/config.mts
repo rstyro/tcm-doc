@@ -2,7 +2,7 @@ import {defineConfig} from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-    title: "TCM",
+    title: "玄学",
     titleTemplate: 'rstyro',
     description: "中医相关文档",
     assetsDir: 'assets',
@@ -12,19 +12,11 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         logo: '/logo.png',
         nav: [
-            {text: 'Home', link: '/'},
+            {text: '首页', link: '/'},
             {
-                text: 'Demo',
+                text: '山',
                 items: [
-                    {text: 'Demo', link: '/demo'},
-                    {text: 'Demo1', link: '/demo/demo1'},
-                    {
-                        text: 'Demo2',
-                        items: [
-
-                            {text: 'abc', link: '/demo/demo2'}
-                        ]
-                    },
+                    {text: '五术之山', link: '/shan/start'},
                 ]
             },
             {
@@ -32,20 +24,30 @@ export default defineConfig({
                 items: [
                     {text: '介绍', link: '/tcm/introduce'},
                 ]
-            }
+            },
+            {
+                text: '命',
+                items: [
+                    {text: '命理师', link: '/fate/what'},
+                    {text: '八字', link: '/fate/bazi'},
+                    {text: '五行', link: '/fate/wuxing'},
+                ]
+            },
+            {
+                text: '相',
+                items: [
+                    {text: '五术之相', link: '/face/start'},
+                ]
+            },
+            {
+                text: '卜',
+                items: [
+                    {text: '五术之卜', link: '/divination/start'},
+                ]
+            },
         ],
 
         sidebar: {
-            '/demo/': [
-                {
-                    text: 'Demo', collapsed: false,
-                    items: [
-                        {text: 'demo', link: '/demo'},
-                        {text: 'demo1', link: '/demo/demo1'},
-                        {text: 'demo2', link: '/demo/demo2'}
-                    ]
-                }
-            ],
             '/tcm/': [
                 {
                     text: '中医', collapsed: false,
@@ -54,6 +56,17 @@ export default defineConfig({
                     ]
                 }
             ],
+            '/fate/': [
+                {
+                    text: '命', collapsed: false,
+                    items: [
+                        {text: '命理师', link: '/fate/what'},
+                        {text: '八字', link: '/fate/bazi'},
+                        {text: '五行', link: '/fate/wuxing'},
+                    ]
+                }
+            ],
+
         },
         socialLinks: [
             {icon: 'github', link: 'https://github.com/rstyro'},

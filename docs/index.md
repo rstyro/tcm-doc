@@ -20,21 +20,24 @@ hero:
       link: /markdown-examples
 
 features:
-  - icon: 🛠️
-    title: Simple and minimal, always
-    details: Lorem ipsum...
-    link: /demo
+  - icon: 
+      src: /bagua.jpg
+    title: 玄学
+    details: 道家五术，又称之为“玄学五术”或“道家五术”...
+    link: /shan/start
     linkText: 查看详情
   - icon:
-      src: /logo.png
-    title: Another cool feature
-    details: Lorem ipsum...
+      src: /tcm.jpg
+    title: 中医学
+    details: 中医学介绍...
+    link: /tcm/introduce
+    linkText: 查看详情
   - icon:
-      dark: /logo.png
-      light: /logo.png
-    title: Another cool feature
-    details: Lorem ipsum...
-    linkText: 跳转外部链接
-    link: https://github.com/rstyro
+      dark: /bagua.png
+      light: /bagua.jpg
+    title: 八字
+    details: 八字基础，八字测算...
+    linkText: 查看详情
+    link: /fate/bazi
 ---
 
