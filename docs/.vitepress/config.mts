@@ -14,16 +14,10 @@ export default defineConfig({
         nav: [
             {text: '首页', link: '/'},
             {
-                text: '山',
-                items: [
-                    {text: '五术之山', link: '/shan/start'},
-                ]
+                text: '山', link: '/shan/start',
             },
             {
-                text: '中医',
-                items: [
-                    {text: '介绍', link: '/tcm/introduce'},
-                ]
+                text: '医', link: '/tcm/introduce',
             },
             {
                 text: '命',
@@ -34,16 +28,10 @@ export default defineConfig({
                 ]
             },
             {
-                text: '相',
-                items: [
-                    {text: '五术之相', link: '/face/start'},
-                ]
+                text: '相',link: '/face/start',
             },
             {
-                text: '卜',
-                items: [
-                    {text: '五术之卜', link: '/divination/start'},
-                ]
+                text: '卜',link: '/divination/start',
             },
         ],
 
