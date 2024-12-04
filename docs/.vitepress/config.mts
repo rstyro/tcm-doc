@@ -17,7 +17,11 @@ export default defineConfig({
                 text: '山', link: '/shan/start',
             },
             {
-                text: '医', link: '/tcm/introduce',
+                text: '医',
+                items: [
+                    {text: '介绍', link: '/tcm/introduce'},
+                    {text: '倪注伤寒论', link: '/tcm/shanghanlun/start'},
+                ]
             },
             {
                 text: '命',
@@ -40,7 +44,14 @@ export default defineConfig({
                 {
                     text: '中医', collapsed: false,
                     items: [
-                        {text: '介绍', link: '/tcm/introduce'}
+                        {text: '介绍', link: '/tcm/introduce'},
+                    ]
+                },
+                {
+                    text: '倪注伤寒论', collapsed: false,
+                    items: [
+                        {text: '前言', link: '/tcm/shanghanlun/start'},
+                        {text: '辨太阳病脉证并治法上篇', link: '/tcm/shanghanlun/taiyang1'},
                     ]
                 }
             ],
