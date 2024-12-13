@@ -1,5 +1,46 @@
 import {defineConfig} from 'vitepress'
 
+
+const itemsLength = 64;
+
+function getZhouYiSidebar() {
+    let items: {}[] = [{
+        text: '《周易》是什么？',
+        link: '/divination/zhouyi/what.md'
+    }]
+    for (let i = 1; i <= itemsLength; i++) {
+        items.push({text: `第${numberToChinese(i)}卦`, link: `/divination/zhouyi/zhouyi_${i}`})
+    }
+    return items
+}
+
+function numberToChinese(number) {
+    const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    const chineseUnits = ['', '十', '百', '千', '万', '亿'];
+
+    // 将数字转换为字符串，以便于处理每一位
+    const numStr = String(number);
+
+    let result = '';
+    let zeroFlag = false; // 用于标记是否需要加上“零”
+
+    for (let i = 0; i < numStr.length; i++) {
+        const digit = parseInt(numStr[i]); // 当前位的数字
+        const unit = chineseUnits[numStr.length - i - 1]; // 当前位的单位
+
+        if (digit !== 0) {
+            if (zeroFlag) {
+                result += chineseNumbers[0]; // 如果前一位是零，则在当前位加上“零”
+                zeroFlag = false;
+            }
+            result += chineseNumbers[digit] == "一" && unit == "十" ? unit : chineseNumbers[digit] + unit; // 加上当前位的数字和单位
+        } else {
+            zeroFlag = true; // 如果当前位是零，则标记为需要加上“零”
+        }
+    }
+    return result;
+}
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     title: "玄学",
@@ -7,7 +48,7 @@ export default defineConfig({
     description: "中医相关文档",
     assetsDir: 'assets',
     base: '/tcm-doc/',
-    head: [['link', { rel: 'icon', href: 'logo.png' }]],
+    head: [['link', {rel: 'icon', href: 'logo.png'}]],
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         logo: '/logo.png',
@@ -32,10 +73,15 @@ export default defineConfig({
                 ]
             },
             {
-                text: '相',link: '/face/start',
+                text: '相', link: '/face/start',
             },
             {
-                text: '卜',link: '/divination/start',
+                text: '卜',
+                items: [
+                    {text: '五术之卜', link: '/divination/start'},
+                    {text: '周易', link: '/divination/zhouyi/what'},
+                ]
+
             },
         ],
 
@@ -65,6 +111,14 @@ export default defineConfig({
                     ]
                 }
             ],
+            '/divination/': [
+                {text: '五术之卜', link: '/divination/start'},
+                {
+                    text: '周易',
+                    collapsed: false,
+                    items: getZhouYiSidebar()
+                }
+                ]
 
         },
         socialLinks: [
