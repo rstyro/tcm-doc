@@ -98,6 +98,14 @@ export default defineConfig({
                     items: [
                         {text: '前言', link: '/tcm/shanghanlun/start'},
                         {text: '辨太阳病脉证并治法上篇', link: '/tcm/shanghanlun/taiyang1'},
+                        {text: '辨太阳病脉证并治法中篇', link: '/tcm/shanghanlun/taiyang2'},
+                        {text: '辨太阳病脉证并治法下篇', link: '/tcm/shanghanlun/taiyang3'},
+                        {text: '辨阳明病脉证并治法', link: '/tcm/shanghanlun/yangming'},
+                        {text: '辨少阳病脉证并治法', link: '/tcm/shanghanlun/shaoyang'},
+                        {text: '辨太阴病脉证并治法', link: '/tcm/shanghanlun/taiyin'},
+                        {text: '辨少阴病脉证并治法', link: '/tcm/shanghanlun/shaoyin'},
+                        {text: '辨厥阴病脉证并治法', link: '/tcm/shanghanlun/jueyin'},
+                        {text: '古代中药重量单位换算', link: '/tcm/shanghanlun/unit'},
                     ]
                 }
             ],
