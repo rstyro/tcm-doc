@@ -14,6 +14,17 @@ function getZhouYiSidebar() {
     return items
 }
 
+function getHuangDiSidebar(len=24) {
+    let items: {}[] = [{
+        text: '《黄帝内经》是什么？',
+        link: '/tcm/huangdi/what.md'
+    }]
+    for (let i = 1; i <= len; i++) {
+        items.push({text: `卷${numberToChinese(i)}`, link: `/tcm/huangdi/huangdi_${i}`})
+    }
+    return items
+}
+
 function numberToChinese(number) {
     const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
     const chineseUnits = ['', '十', '百', '千', '万', '亿'];
@@ -61,7 +72,9 @@ export default defineConfig({
                 text: '医',
                 items: [
                     {text: '介绍', link: '/tcm/introduce'},
+                    {text: '黄帝内经', link: '/tcm/huangdi/what'},
                     {text: '倪注伤寒论', link: '/tcm/shanghanlun/start'},
+
                 ]
             },
             {
@@ -88,10 +101,14 @@ export default defineConfig({
         sidebar: {
             '/tcm/': [
                 {
-                    text: '中医', collapsed: false,
+                    text: '中医', collapsed: true,
                     items: [
                         {text: '介绍', link: '/tcm/introduce'},
                     ]
+                },
+                {
+                    text: '黄帝内经', collapsed: false,
+                    items: getHuangDiSidebar()
                 },
                 {
                     text: '倪注伤寒论', collapsed: false,
