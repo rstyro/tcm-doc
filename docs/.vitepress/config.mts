@@ -20,7 +20,7 @@ function getHuangDiSidebar(len=24) {
         link: '/tcm/huangdi/what.md'
     }]
     for (let i = 1; i <= len; i++) {
-        items.push({text: `卷${numberToChinese(i)}`, link: `/tcm/huangdi/huangdi_${i}`})
+        items.push({text: `素问·卷${numberToChinese(i)}`, link: `/tcm/huangdi/huangdi_${i}`})
     }
     return items
 }
