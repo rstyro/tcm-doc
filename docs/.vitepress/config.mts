@@ -17,6 +17,7 @@ function getZhouYiSidebar() {
     return items
 }
 
+
 function getHuangDiSidebar(len=24) {
     let items: {}[] = [{
         text: '《黄帝内经》是什么？',
@@ -96,6 +97,7 @@ export default defineConfig({
                 items: [
                     {text: '五术之卜', link: '/divination/start'},
                     {text: '周易', link: '/divination/zhouyi/what'},
+                    {text: '十翼', link: '/divination/shiyi/what'},
                 ]
 
             },
@@ -145,6 +147,22 @@ export default defineConfig({
                     text: '周易',
                     collapsed: false,
                     items: getZhouYiSidebar()
+                },
+                {
+                    text: '十翼', collapsed: false,
+                    items: [
+                        {text: '前言', link: '/divination/shiyi/what'},
+                        {text: '彖传(上)', link: '/divination/shiyi/shiyi_1'},
+                        // {text: '彖传(下)', link: '/divination/shiyi/shiyi_2'},
+                        // {text: '象传(上)', link: '/divination/shiyi/shiyi_3'},
+                        // {text: '象传(下)', link: '/divination/shiyi/shiyi_4'},
+                        // {text: '文言传', link: '/divination/shiyi/shiyi_5'},
+                        // {text: '系辞(上)', link: '/divination/shiyi/shiyi_6'},
+                        // {text: '系辞(下)', link: '/divination/shiyi/shiyi_7'},
+                        // {text: '说卦传', link: '/divination/shiyi/shiyi_8'},
+                        // {text: '序卦传', link: '/divination/shiyi/shiyi_9'},
+                        // {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
+                    ]
                 }
                 ]
 
