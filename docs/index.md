@@ -24,7 +24,7 @@ features:
       src: /bagua.jpg
     title: 玄学
     details: 道家五术，又称之为“玄学五术”或“道家五术”...
-    link: /shan/start
+    link: /divination/start
     linkText: 查看详情
   - icon:
       src: /tcm.jpg
