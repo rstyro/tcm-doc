@@ -136,6 +136,7 @@ export default defineConfig({
                         {text: '命理师', link: '/fate/what'},
                         {text: '八字', link: '/fate/bazi'},
                         {text: '五行', link: '/fate/wuxing'},
+                        {text: '太岁', link: '/fate/taisui'},
                     ]
                 }
             ],
