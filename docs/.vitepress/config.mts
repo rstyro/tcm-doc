@@ -3,7 +3,91 @@ import {defineConfig} from 'vitepress'
 
 const itemsLength = 64;
 
-const GUA_64=[{"name":"乾","num":" 1","symbol":"䷀"},{"name":"坤","num":" 2","symbol":"䷁"},{"name":"屯","num":" 3","symbol":"䷂"},{"name":"蒙","num":" 4","symbol":"䷃"},{"name":"需","num":" 5","symbol":"䷄"},{"name":"讼","num":" 6","symbol":"䷅"},{"name":"师","num":" 7","symbol":"䷆"},{"name":"比","num":" 8","symbol":"䷇"},{"name":"小畜","num":" 9","symbol":"䷈"},{"name":"履","num":"10","symbol":"䷉"},{"name":"泰","num":"11","symbol":"䷊"},{"name":"否","num":"12","symbol":"䷋"},{"name":"同人","num":"13","symbol":"䷌"},{"name":"大有","num":"14","symbol":"䷍"},{"name":"谦","num":"15","symbol":"䷎"},{"name":"豫","num":"16","symbol":"䷏"},{"name":"随","num":"17","symbol":"䷐"},{"name":"蛊","num":"18","symbol":"䷑"},{"name":"临","num":"19","symbol":"䷒"},{"name":"观","num":"20","symbol":"䷓"},{"name":"噬嗑","num":"21","symbol":"䷔"},{"name":"贲","num":"22","symbol":"䷕"},{"name":"剥","num":"23","symbol":"䷖"},{"name":"复","num":"24","symbol":"䷗"},{"name":"无妄","num":"25","symbol":"䷘"},{"name":"大畜","num":"26","symbol":"䷙"},{"name":"颐","num":"27","symbol":"䷚"},{"name":"大过","num":"28","symbol":"䷛"},{"name":"坎","num":"29","symbol":"䷜"},{"name":"离","num":"30","symbol":"䷝"},{"name":"咸","num":"31","symbol":"䷞"},{"name":"恒","num":"32","symbol":"䷟"},{"name":"遁","num":"33","symbol":"䷠"},{"name":"大壮","num":"34","symbol":"䷡"},{"name":"晋","num":"35","symbol":"䷢"},{"name":"明夷","num":"36","symbol":"䷣"},{"name":"家人","num":"37","symbol":"䷤"},{"name":"睽","num":"38","symbol":"䷥"},{"name":"蹇","num":"39","symbol":"䷦"},{"name":"解","num":"40","symbol":"䷧"},{"name":"损","num":"41","symbol":"䷨"},{"name":"益","num":"42","symbol":"䷩"},{"name":"夬","num":"43","symbol":"䷪"},{"name":"姤","num":"44","symbol":"䷫"},{"name":"萃","num":"45","symbol":"䷬"},{"name":"升","num":"46","symbol":"䷭"},{"name":"困","num":"47","symbol":"䷮"},{"name":"井","num":"48","symbol":"䷯"},{"name":"革","num":"49","symbol":"䷰"},{"name":"鼎","num":"50","symbol":"䷱"},{"name":"震","num":"51","symbol":"䷲"},{"name":"艮","num":"52","symbol":"䷳"},{"name":"渐","num":"53","symbol":"䷴"},{"name":"归妹","num":"54","symbol":"䷵"},{"name":"丰","num":"55","symbol":"䷶"},{"name":"旅","num":"56","symbol":"䷷"},{"name":"巽","num":"57","symbol":"䷸"},{"name":"兑","num":"58","symbol":"䷹"},{"name":"涣","num":"59","symbol":"䷺"},{"name":"节","num":"60","symbol":"䷻"},{"name":"中孚","num":"61","symbol":"䷼"},{"name":"小过","num":"62","symbol":"䷽"},{"name":"既济","num":"63","symbol":"䷾"},{"name":"未济","num":"64","symbol":"䷿"}]
+const GUA_64 = [{"name": "乾", "num": " 1", "symbol": "䷀"}, {"name": "坤", "num": " 2", "symbol": "䷁"}, {
+    "name": "屯",
+    "num": " 3",
+    "symbol": "䷂"
+}, {"name": "蒙", "num": " 4", "symbol": "䷃"}, {"name": "需", "num": " 5", "symbol": "䷄"}, {
+    "name": "讼",
+    "num": " 6",
+    "symbol": "䷅"
+}, {"name": "师", "num": " 7", "symbol": "䷆"}, {"name": "比", "num": " 8", "symbol": "䷇"}, {
+    "name": "小畜",
+    "num": " 9",
+    "symbol": "䷈"
+}, {"name": "履", "num": "10", "symbol": "䷉"}, {"name": "泰", "num": "11", "symbol": "䷊"}, {
+    "name": "否",
+    "num": "12",
+    "symbol": "䷋"
+}, {"name": "同人", "num": "13", "symbol": "䷌"}, {"name": "大有", "num": "14", "symbol": "䷍"}, {
+    "name": "谦",
+    "num": "15",
+    "symbol": "䷎"
+}, {"name": "豫", "num": "16", "symbol": "䷏"}, {"name": "随", "num": "17", "symbol": "䷐"}, {
+    "name": "蛊",
+    "num": "18",
+    "symbol": "䷑"
+}, {"name": "临", "num": "19", "symbol": "䷒"}, {"name": "观", "num": "20", "symbol": "䷓"}, {
+    "name": "噬嗑",
+    "num": "21",
+    "symbol": "䷔"
+}, {"name": "贲", "num": "22", "symbol": "䷕"}, {"name": "剥", "num": "23", "symbol": "䷖"}, {
+    "name": "复",
+    "num": "24",
+    "symbol": "䷗"
+}, {"name": "无妄", "num": "25", "symbol": "䷘"}, {"name": "大畜", "num": "26", "symbol": "䷙"}, {
+    "name": "颐",
+    "num": "27",
+    "symbol": "䷚"
+}, {"name": "大过", "num": "28", "symbol": "䷛"}, {"name": "坎", "num": "29", "symbol": "䷜"}, {
+    "name": "离",
+    "num": "30",
+    "symbol": "䷝"
+}, {"name": "咸", "num": "31", "symbol": "䷞"}, {"name": "恒", "num": "32", "symbol": "䷟"}, {
+    "name": "遁",
+    "num": "33",
+    "symbol": "䷠"
+}, {"name": "大壮", "num": "34", "symbol": "䷡"}, {"name": "晋", "num": "35", "symbol": "䷢"}, {
+    "name": "明夷",
+    "num": "36",
+    "symbol": "䷣"
+}, {"name": "家人", "num": "37", "symbol": "䷤"}, {"name": "睽", "num": "38", "symbol": "䷥"}, {
+    "name": "蹇",
+    "num": "39",
+    "symbol": "䷦"
+}, {"name": "解", "num": "40", "symbol": "䷧"}, {"name": "损", "num": "41", "symbol": "䷨"}, {
+    "name": "益",
+    "num": "42",
+    "symbol": "䷩"
+}, {"name": "夬", "num": "43", "symbol": "䷪"}, {"name": "姤", "num": "44", "symbol": "䷫"}, {
+    "name": "萃",
+    "num": "45",
+    "symbol": "䷬"
+}, {"name": "升", "num": "46", "symbol": "䷭"}, {"name": "困", "num": "47", "symbol": "䷮"}, {
+    "name": "井",
+    "num": "48",
+    "symbol": "䷯"
+}, {"name": "革", "num": "49", "symbol": "䷰"}, {"name": "鼎", "num": "50", "symbol": "䷱"}, {
+    "name": "震",
+    "num": "51",
+    "symbol": "䷲"
+}, {"name": "艮", "num": "52", "symbol": "䷳"}, {"name": "渐", "num": "53", "symbol": "䷴"}, {
+    "name": "归妹",
+    "num": "54",
+    "symbol": "䷵"
+}, {"name": "丰", "num": "55", "symbol": "䷶"}, {"name": "旅", "num": "56", "symbol": "䷷"}, {
+    "name": "巽",
+    "num": "57",
+    "symbol": "䷸"
+}, {"name": "兑", "num": "58", "symbol": "䷹"}, {"name": "涣", "num": "59", "symbol": "䷺"}, {
+    "name": "节",
+    "num": "60",
+    "symbol": "䷻"
+}, {"name": "中孚", "num": "61", "symbol": "䷼"}, {"name": "小过", "num": "62", "symbol": "䷽"}, {
+    "name": "既济",
+    "num": "63",
+    "symbol": "䷾"
+}, {"name": "未济", "num": "64", "symbol": "䷿"}]
 
 function getZhouYiSidebar() {
     let items: {}[] = [{
@@ -11,14 +95,14 @@ function getZhouYiSidebar() {
         link: '/divination/zhouyi/what.md'
     }]
     for (let i = 0; i < GUA_64.length; i++) {
-        let gua=GUA_64[i];
-        items.push({text: `第${gua.num}卦 ${gua.symbol} ${gua.name}`, link: `/divination/zhouyi/zhouyi_${i+1}`})
+        let gua = GUA_64[i];
+        items.push({text: `第${gua.num}卦 ${gua.symbol} ${gua.name}`, link: `/divination/zhouyi/zhouyi_${i + 1}`})
     }
     return items
 }
 
 
-function getHuangDiSidebar(len=24) {
+function getHuangDiSidebar(len = 24) {
     let items: {}[] = [{
         text: '《黄帝内经》是什么？',
         link: '/tcm/huangdi/what.md'
@@ -87,6 +171,12 @@ export default defineConfig({
                     {text: '命理师', link: '/fate/what'},
                     {text: '八字', link: '/fate/bazi'},
                     {text: '五行', link: '/fate/wuxing'},
+                    {
+                        text: '查询工具', items: [
+                            {text: '八字查询工具', link: '/fate/query/baziQuery'},
+                            {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
+                        ]
+                    },
                 ]
             },
             {
@@ -139,6 +229,12 @@ export default defineConfig({
                         {text: '八字', link: '/fate/bazi'},
                         {text: '五行', link: '/fate/wuxing'},
                         {text: '太岁', link: '/fate/taisui'},
+                        {
+                            text: '查询工具', items: [
+                                {text: '八字查询工具', link: '/fate/query/baziQuery'},
+                                {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
+                            ]
+                        },
                     ]
                 }
             ],
@@ -165,7 +261,7 @@ export default defineConfig({
                         // {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
                     ]
                 }
-                ]
+            ]
 
         },
         socialLinks: [
