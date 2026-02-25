@@ -48,13 +48,13 @@ export const CHINESE_ZODIAC = {
 };
 
 export const TAI_SUI_TYPE = {
-  ZHI_TAI_SUI: { desc: '本命年' },
-  CHONG_TAI_SUI: { desc: '冲太岁' },
-  HAI_TAI_SUI: { desc: '害太岁' },
-  XING_TAI_SUI: { desc: '刑太岁' },
-  PO_TAI_SUI: { desc: '破太岁' },
-  HE_LIU_TAI_SUI: { desc: '六合太岁' },
-  HE_SAN_TAI_SUI: { desc: '三合太岁' }
+  ZHI_TAI_SUI: { name: '本命年' ,desc: '运势阻滞,吉凶参半'},
+  CHONG_TAI_SUI: { name: '冲太岁',desc: '人事变动,财运波折' },
+  HAI_TAI_SUI: { name: '害太岁' ,desc: '小人陷害,是非增多,事业阻滞'},
+  XING_TAI_SUI: { name: '刑太岁' ,desc: '口舌纠纷,工作变动'},
+  PO_TAI_SUI: { name: '破太岁' ,desc: '破财破损,事业下滑,感情易变'},
+  HE_LIU_TAI_SUI: { name: '六合太岁', desc: '贵人相助,运势顺畅' },
+  HE_SAN_TAI_SUI: { name: '三合太岁', desc: '合作共赢,机遇增多' }
 };
 
 // ===================== 太岁规则定义 =====================
@@ -179,19 +179,27 @@ const buildTaiSuiVoWithList = (type, mainBranch, branchList, isSanHe) => {
     const zodiac = getZodiacByBranch(item);
     return `${item.name}(${zodiac.name}${zodiac.icon})`;
   }).join('、');
+
+
+  const zodiacList = branchList.map(item => {
+    const zodiac = getZodiacByBranch(item);
+    return {zodiac,branchName:item.name};
+  });
+  console.log("branchList=",branchList,zodiacList)
   
   let desc = '';
   if (isSanHe) {
-    desc = `${type.desc}：${mainBranch.name}(${mainZodiac.name}) 合局: ${zodiacInfo}`;
+    desc = `${type.name}：${mainBranch.name}(${mainZodiac.name}) 合局: ${zodiacInfo}`;
   } else {
-    desc = `${type.desc}：${zodiacInfo}`;
+    desc = `${type.name}：${zodiacInfo}`;
   }
 
   return {
     type: type,
     earthlyBranch: mainBranch,
     zodiac: more?mainZodiac:getZodiacByBranch(branchList[0])||mainZodiac, // 这里的zodiac包含icon字段
-    desc: desc
+    desc: desc,
+    zodiacList:zodiacList || []
   };
 };
 
@@ -200,11 +208,14 @@ const buildTaiSuiVoWithList = (type, mainBranch, branchList, isSanHe) => {
  */
 const buildBaseTaiSuiVo = (type, branch) => {
   const zodiac = getZodiacByBranch(branch);
+  let zodiacList=[];
+  zodiacList.push({zodiac,branchName:zodiac.branch.name});
   return {
     type: type,
     earthlyBranch: branch,
     zodiac: zodiac, // 这里的zodiac包含icon字段
-    desc: `${type.desc}：${branch.name}(${zodiac.name}${zodiac.icon})`
+    desc: `${type.name}：${branch.name}(${zodiac.name}${zodiac.icon})`,
+    zodiacList
   };
 };
 
