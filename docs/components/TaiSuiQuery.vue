@@ -5,7 +5,6 @@
       <div class="header-bg"></div>
       <div class="header-content">
         <div class="title-wrapper">
-          <i class="icon-taisui"></i>
           <h1 class="title">太岁查询系统</h1>
         </div>
         <p class="subtitle">输入年份查询该年太岁、犯太岁生肖及化解建议</p>
@@ -16,8 +15,7 @@
     <!-- 查询区域 -->
     <div class="query-card">
       <div class="query-header">
-        <i class="icon-year"></i>
-        <h2>年份查询</h2>
+        <h2><i class="icon-year"></i> 年份查询</h2>
       </div>
 
       <div class="query-form">
@@ -72,29 +70,34 @@
     <div v-if="resultInfo" class="result-card">
       <div class="result-header">
         <div class="result-title">
-          <i class="icon-result"></i>
-          <h2>查询结果 - {{ resultInfo.year }}年</h2>
+          <h2><i class="icon-result"></i> 查询结果 - {{ resultInfo.year }}年</h2>
         </div>
         <div class="result-ganzhi">
           {{ resultInfo.ganZhi }}
         </div>
       </div>
 
-      <!-- 概览区域 -->
-      <div class="overview-section">
-        <div class="zodiac-badge">
-          <div class="badge-icon">{{ resultInfo.yearZodiac?.icon || '🐲' }}</div>
-          <span class="badge-text">{{ resultInfo.yearZodiac?.name }}年</span>
+      <!-- 简洁概览 -->
+      <div class="summary-bar">
+        <div class="summary-item">
+          <span class="summary-label">当年生肖</span>
+          <span class="summary-value">
+            <span class="zodiac-icon">{{ resultInfo.yearZodiac?.icon || '🐲' }}</span>
+            {{ resultInfo.yearZodiac?.name }}
+          </span>
         </div>
-        <div class="taisui-badge">
-          <div class="badge-icon">🧧</div>
-          <span class="badge-text">值年太岁</span>
+        <div class="summary-item">
+          <span class="summary-label">值年太岁</span>
+          <span class="summary-value">
+            {{ resultInfo.taisuiList.find(t => t.type.name === '本命年')?.zodiac?.name || '未知' }} 年
+          </span>
         </div>
-        <div class="warning-badge" v-if="resultInfo.hasBadTaiSui">
-          <div class="badge-icon">⚠️</div>
-          <span class="badge-text">有{{ resultInfo.badTaiSuiCount }}种犯太岁</span>
+        <div v-if="resultInfo.hasBadTaiSui" class="summary-item warning">
+          <span class="summary-label">犯太岁数量</span>
+          <span class="summary-value">{{ resultInfo.badTaiSuiCount }} 种</span>
         </div>
       </div>
+
 
       <!-- 太岁详情 -->
       <div class="taisui-detail-section">
@@ -102,18 +105,12 @@
 
         <!-- 犯太岁生肖 -->
         <div v-if="resultInfo.badTaiSuiList.length > 0" class="bad-taisui-section">
-          <h4 class="subsection-title">
-            <i class="icon-warning"></i>
-            犯太岁生肖
-          </h4>
-
-
+          <h4 class="subsection-title"><i class="icon-warning"></i>犯太岁生肖</h4>
           <div class="taisui-list-container">
               <div
                    v-for="(taisui, index) in resultInfo.badTaiSuiList"
                    :key="index"
                    class="taisui-item"
-                   :class="getTaiSuiCardClass(taisui.type.name)"
                    @mouseenter="onCardHover(index, true)"
                    @mouseleave="onCardHover(index, false)"
               >
@@ -144,16 +141,12 @@
 
         <!-- 三合六合关系 -->
         <div v-if="resultInfo.goodTaiSuiList.length > 0" class="good-taisui-section">
-          <h4 class="subsection-title">
-            <i class="icon-good"></i>
-            吉星高照
-          </h4>
+          <h4 class="subsection-title"><i class="icon-good"></i>吉象太岁</h4>
           <div class="taisui-list-container">
             <div
                 v-for="(taisui, index) in resultInfo.goodTaiSuiList"
                 :key="index"
                 class="taisui-item"
-                :class="getTaiSuiCardClass(taisui.type)"
                 @mouseenter="onCardHover(index, true)"
                 @mouseleave="onCardHover(index, false)"
             >
@@ -176,6 +169,7 @@
                   {{ item }}
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -189,7 +183,7 @@
         </h3>
         <div class="evil-star-grid">
           <div 
-            v-for="(item, index) in resultInfo.evilStarInfo.list" 
+            v-for="(item, index) in sortedEvilStars"
             :key="index"
             class="evil-star-card"
             :class="{
@@ -202,7 +196,11 @@
             <div class="evil-star-icon">{{ item.icon }}</div>
             <div class="evil-star-name">{{ item.name }}</div>
             <div class="evil-star-type">{{ item.evilStar.shortName }}</div>
-            <div class="evil-star-desc">{{ item.evilStar.desc }}</div>
+            <div class="evil-star-desc">
+              <div v-for="(item, idx) in (item.evilStar.desc || '').split('、')" :key="idx">
+                {{ item }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -277,6 +275,24 @@ const hoveredSuggestionIndex = ref(-1);
 const minYear = 1000;
 const maxYear = 10000;
 
+// 排序后的凶星列表
+const sortedEvilStars = computed(() => {
+  if (!resultInfo.value?.evilStarInfo?.list) return [];
+  
+  // 定义排序优先级,越小优先级越高
+  const luckLevelPriority = {
+    '中': 1,
+    '大凶': 2,
+    '小凶': 3,
+    '吉': 4
+  };
+  
+  return [...resultInfo.value.evilStarInfo.list].sort((a, b) => {
+    const priorityA = luckLevelPriority[a.evilStar.luckLevel] || 999;
+    const priorityB = luckLevelPriority[b.evilStar.luckLevel] || 999;
+    return priorityA - priorityB;
+  });
+});
 
 // 年份预设
 const yearPresets = computed(() => {
@@ -429,72 +445,6 @@ const clearResult = () => {
   inputYear.value = '';
 };
 
-const getTaiSuiCardClass = (type) => {
-  const typeClassMap = {
-    'ZHI_TAI_SUI': 'card-zhi',
-    'CHONG_TAI_SUI': 'card-chong',
-    'HAI_TAI_SUI': 'card-hai',
-    'XING_TAI_SUI': 'card-xing',
-    'PO_TAI_SUI': 'card-po',
-    'HE_LIU_TAI_SUI': 'card-heliu',
-    'HE_SAN_TAI_SUI': 'card-hesan'
-  };
-  return typeClassMap[type] || '';
-};
-
-const getTaiSuiTypeClass = (type) => {
-  const typeClassMap = {
-    'ZHI_TAI_SUI': 'badge-zhi',
-    'CHONG_TAI_SUI': 'badge-chong',
-    'HAI_TAI_SUI': 'badge-hai',
-    'XING_TAI_SUI': 'badge-xing',
-    'PO_TAI_SUI': 'badge-po',
-    'HE_LIU_TAI_SUI': 'badge-heliu',
-    'HE_SAN_TAI_SUI': 'badge-hesan'
-  };
-  return typeClassMap[type] || '';
-};
-
-const getShortTypeName = (type) => {
-  const nameMap = {
-    'ZHI_TAI_SUI': '值',
-    'CHONG_TAI_SUI': '冲',
-    'HAI_TAI_SUI': '害',
-    'XING_TAI_SUI': '刑',
-    'PO_TAI_SUI': '破',
-    'HE_LIU_TAI_SUI': '六合',
-    'HE_SAN_TAI_SUI': '三合'
-  };
-  return nameMap[type] || type;
-};
-
-const getTaiSuiSuggestion = (type) => {
-  const suggestionMap = {
-    'ZHI_TAI_SUI': '本命年，运势起伏较大，需特别谨慎',
-    'CHONG_TAI_SUI': '冲太岁，易有变动、冲突，注意人际关系',
-    'HAI_TAI_SUI': '害太岁，易遭陷害、中伤，注意小人',
-    'XING_TAI_SUI': '刑太岁，易有官非、是非，注意法律问题',
-    'PO_TAI_SUI': '破太岁，易有破财、破坏，注意财务安全',
-    'HE_LIU_TAI_SUI': '六合太岁，有贵人相助，运势较佳',
-    'HE_SAN_TAI_SUI': '三合太岁，合作顺利，事业有发展'
-  };
-  return suggestionMap[type];
-};
-
-const getZodiacTaiSuiTypes = (zodiac) => {
-  if (!resultInfo.value) return [];
-  return resultInfo.value.badTaiSuiList
-      .filter(taisui => taisui.zodiac?.name === zodiac.name)
-      .map(taisui => taisui.type);
-};
-
-const getZodiacGoodTaiSuiTypes = (zodiac) => {
-  if (!resultInfo.value) return [];
-  return resultInfo.value.goodTaiSuiList
-      .filter(taisui => taisui.zodiac?.name === zodiac.name)
-      .map(taisui => taisui.type);
-};
-
 // 交互方法
 const onCardHover = (index, isHovering) => {
   hoveredCardIndex.value = isHovering ? index : -1;
@@ -511,30 +461,6 @@ onMounted(() => {
 </script>
 
 <style scoped >
-
-.taisui-list-container{
-  display: flex;
-  justify-content: space-around;
-}
-
-.taisui-item-zodiac{
-  display: flex;
-  justify-content: space-around;
-}
-
-.taisui-item-zodiac-icon{
-  font-size: 23px;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.taisui-item-zodiac-name{
-  font-size: 18px;
-  font-weight: bold;
-}
 
 /* 全局样式 */
 .taisui-container {
@@ -582,12 +508,6 @@ onMounted(() => {
   margin-bottom: 16px;
 }
 
-.icon-taisui::before {
-  content: "🧧";
-  font-size: 2.5rem;
-  animation: pulse 2s infinite;
-}
-
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
@@ -595,6 +515,7 @@ onMounted(() => {
 }
 
 .title {
+  padding: 10px 0px;
   font-size: 3rem;
   color: white;
   margin: 0;
@@ -621,11 +542,36 @@ onMounted(() => {
   border-radius: 2px;
 }
 
+.taisui-list-container{
+  display: flex;
+  justify-content: space-around;
+}
+
+.taisui-item-zodiac{
+  display: flex;
+  justify-content: space-around;
+}
+
+.taisui-item-zodiac-icon{
+  font-size: 23px;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.taisui-item-zodiac-name{
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
 /* 查询卡片 */
 .query-card {
   background: white;
   border-radius: 20px;
-  padding: 35px;
+  padding: 30px;
   margin: 0 20px 30px;
   box-shadow: 0 15px 35px rgba(139, 69, 19, 0.15);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -830,9 +776,6 @@ onMounted(() => {
 }
 
 .result-title {
-  display: flex;
-  align-items: center;
-  gap: 14px;
   color: #8b4513;
 }
 
@@ -854,69 +797,50 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
 }
 
-/* 概览区域 */
-.overview-section {
+/* 简洁概览条 */
+.summary-bar {
   display: flex;
-  gap: 25px;
-  margin-bottom: 40px;
   flex-wrap: wrap;
-  align-items: center;
+  gap: 20px;
   justify-content: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #faf0e6;
+  border-radius: 20px;
+  border: 2px solid #d2b48c;
+  box-shadow: inset 0 2px 4px rgba(139, 69, 19, 0.05);
 }
 
-.zodiac-badge,
-.taisui-badge,
-.warning-badge {
+.summary-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 16px 24px;
-  border-radius: 18px;
-  font-weight: 600;
-  font-size: 1.2rem;
-  border: 3px solid;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  transition: all 0.3s ease;
-  min-width: 200px;
-  justify-content: center;
+  min-width: 140px;
+  padding: 10px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.1);
 }
 
-.zodiac-badge:hover,
-.taisui-badge:hover,
-.warning-badge:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+.summary-item.warning {
+  background: #fff0f0;
+  border-left: 4px solid #dc143c;
 }
 
-.zodiac-badge {
-  background: linear-gradient(135deg, #ffeaa7 0%, #f4a460 100%);
+.summary-label {
+  font-size: 0.9rem;
   color: #8b4513;
-  border-color: #deb887;
+  opacity: 0.8;
+  margin-bottom: 6px;
 }
 
-.taisui-badge {
-  background: linear-gradient(135deg, #dc143c 0%, #b22222 100%);
-  color: white;
-  border-color: #8b0000;
-}
-
-.warning-badge {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-  color: white;
-  border-color: #dc143c;
-}
-
-.badge-icon {
-  font-size: 1.8rem;
+.summary-value {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-}
-
-.badge-text {
+  gap: 8px;
+  font-size: 1.3rem;
   font-weight: 600;
+  color: #5a3e2b;
 }
 
 /* 太岁详情 */
@@ -948,12 +872,6 @@ onMounted(() => {
   gap: 8px;
 }
 
-.taisui-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 25px;
-}
 
 .taisui-item {
   background: white;
@@ -981,75 +899,6 @@ onMounted(() => {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
-.taisui-item.card-zhi {
-  border-color: #dc143c;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
-}
-
-.taisui-item.card-zhi::before {
-  background: #dc143c;
-}
-
-.taisui-item.card-chong {
-  border-color: #ff6b6b;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
-}
-
-.taisui-item.card-chong::before {
-  background: #ff6b6b;
-}
-
-.taisui-item.card-hai {
-  border-color: #ff8c00;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
-}
-
-.taisui-item.card-hai::before {
-  background: #ff8c00;
-}
-
-.taisui-item.card-xing {
-  border-color: #dc143c;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
-}
-
-.taisui-item.card-xing::before {
-  background: #dc143c;
-}
-
-.taisui-item.card-po {
-  border-color: #ff6347;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe6e6 100%);
-}
-
-.taisui-item.card-po::before {
-  background: #ff6347;
-}
-
-.taisui-item.card-heliu {
-  border-color: #32cd32;
-  background: linear-gradient(135deg, #f0fff0 0%, #e0ffe0 100%);
-}
-
-.taisui-item.card-heliu::before {
-  background: #32cd32;
-}
-
-.taisui-item.card-hesan {
-  border-color: #228b22;
-  background: linear-gradient(135deg, #f0fff0 0%, #e0ffe0 100%);
-}
-
-.taisui-item.card-hesan::before {
-  background: #228b22;
-}
-
-.taisui-item-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .taisui-item-header {
   text-align: center;
   padding-bottom: 12px;
@@ -1072,6 +921,7 @@ onMounted(() => {
   margin-bottom: 8px;
   color: #666;
   font-size: 0.95rem;
+  text-align: center;
 }
 
 .desc-item:last-child {
@@ -1457,15 +1307,15 @@ onMounted(() => {
 
 .evil-star-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
   margin-top: 25px;
 }
 
 .evil-star-card {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border-radius: 20px;
-  padding: 25px;
+  padding: 10px;
   text-align: center;
   transition: all 0.3s ease;
   border: 3px solid;
@@ -1569,7 +1419,7 @@ onMounted(() => {
 }
 
 .icon-warning::before {
-  content: "⚠️";
+  content: "🚩";
   font-size: 1.2rem;
 }
 
@@ -1578,225 +1428,9 @@ onMounted(() => {
   font-size: 1.2rem;
 }
 
-.icon-taisui::before {
-  content: "🧧";
-  font-size: 2.5rem;
-}
-
 .icon-evil-star::before {
   content: "🌟";
   font-size: 1.2rem;
 }
 
-/* 响应式设计 */
-@media (max-width: 1024px) {
-  .taisui-container {
-    max-width: 100%;
-  }
-  
-  .query-card,
-  .result-card {
-    margin: 0 15px 30px;
-    padding: 30px;
-  }
-  
-  .suggestion-list {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  }
-  
-  .evil-star-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  }
-  
-  .evil-star-card {
-    padding: 20px;
-  }
-  
-  .evil-star-icon {
-    font-size: 2.5rem;
-  }
-  
-  .taisui-item-body {
-    gap: 20px;
-  }
-  
-  .taisui-zodiac-list {
-    gap: 15px;
-  }
-  
-  .taisui-zodiac-info {
-    min-width: 80px;
-  }
-  
-  .taisui-zodiac-icon {
-    font-size: 2.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .taisui-container {
-    padding: 0;
-  }
-  
-  .header-content {
-    padding: 40px 20px 30px;
-  }
-  
-  .title {
-    font-size: 2.2rem;
-  }
-  
-  .title-wrapper {
-    gap: 12px;
-  }
-  
-  .query-card,
-  .result-card {
-    margin: 0 15px 25px;
-    padding: 25px;
-  }
-  
-  .result-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 15px;
-  }
-  
-  .overview-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-  }
-  
-  .zodiac-badge,
-  .taisui-badge,
-  .warning-badge {
-    min-width: auto;
-    justify-content: flex-start;
-  }
-  
-  .taisui-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .suggestion-list {
-    grid-template-columns: 1fr;
-  }
-  
-  .evil-star-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .evil-star-card {
-    padding: 16px;
-  }
-  
-  .evil-star-icon {
-    font-size: 2rem;
-  }
-  
-  .taisui-item-body {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-  }
-  
-  .taisui-zodiac-info {
-    min-width: auto;
-  }
-  
-  .taisui-zodiac-icon {
-    font-size: 2.5rem;
-  }
-  
-  .action-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .clear-btn,
-  .current-year-btn {
-    justify-content: center;
-  }
-  
-  .empty-state {
-    margin: 20px 15px;
-    padding: 60px 30px;
-  }
-  
-  .empty-icon {
-    font-size: 4rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-bg {
-    height: 250px;
-  }
-  
-  .title {
-    font-size: 1.8rem;
-  }
-  
-  .query-header h2,
-  .result-title h2 {
-    font-size: 1.4rem;
-  }
-  
-  .year-presets {
-    justify-content: center;
-  }
-  
-  .year-preset-btn {
-    padding: 8px 16px;
-    font-size: 0.9rem;
-  }
-  
-  .query-btn {
-    padding: 16px 20px;
-    font-size: 1.1rem;
-  }
-  
-  .taisui-card {
-    padding: 16px;
-  }
-  
-  .suggestion-item {
-    padding: 20px;
-  }
-  
-  .evil-star-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .evil-star-card {
-    padding: 16px;
-  }
-  
-  .evil-star-icon {
-    font-size: 2.5rem;
-  }
-  
-  .taisui-item {
-    padding: 16px;
-  }
-  
-  .taisui-item-body {
-    gap: 12px;
-  }
-  
-  .taisui-zodiac-icon {
-    font-size: 2rem;
-  }
-  
-  .action-section {
-    gap: 12px;
-  }
-  
-  .clear-btn,
-  .current-year-btn {
-    padding: 14px 20px;
-    font-size: 1rem;
-  }
-}
 </style>

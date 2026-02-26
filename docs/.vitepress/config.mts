@@ -171,12 +171,6 @@ export default defineConfig({
                     {text: '命理师', link: '/fate/what'},
                     {text: '八字', link: '/fate/bazi'},
                     {text: '五行', link: '/fate/wuxing'},
-                    {
-                        text: '查询工具', items: [
-                            {text: '八字查询工具', link: '/fate/query/baziQuery'},
-                            {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
-                        ]
-                    },
                 ]
             },
             {
@@ -191,6 +185,12 @@ export default defineConfig({
                 ]
 
             },
+            {
+                text: '查询工具', items: [
+                    {text: '八字查询工具', link: '/fate/query/baziQuery'},
+                    {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
+                ]
+            }
         ],
 
         sidebar: {

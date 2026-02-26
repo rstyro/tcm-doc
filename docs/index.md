@@ -33,7 +33,7 @@ features:
     link: /tcm/introduce
     linkText: 查看详情
   - icon:
-      dark: /bagua.png
+      dark: /bagua.jpg
       light: /bagua.jpg
     title: 八字
     details: 八字基础，八字测算...

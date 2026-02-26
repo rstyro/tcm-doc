@@ -8,14 +8,14 @@ export const EVIL_STAR = {
   TAI_SUI: {
     name: '太岁',
     luckLevel: '中',
-    desc: '值年之主，中性。冲/刑/破则转凶，合则平',
+    desc: '值年之主、中性、冲/刑/破则转凶、合则平',
     aliases: ['太岁', '剑锋', '伏尸', '建'],
     color: '#ffcc00'
   },
   TAI_YANG: {
     name: '青龙',
     luckLevel: '吉',
-    desc: '主喜事、贵人运，男性更利',
+    desc: '主喜事、贵人运、男性更利',
     aliases: ['太阳', '青龙', '天空', '除'],
     color: '#4CAF50'
   },
@@ -29,7 +29,7 @@ export const EVIL_STAR = {
   TAI_YIN: {
     name: '六合',
     luckLevel: '吉',
-    desc: '主财运与人缘',
+    desc: '主财运、人缘',
     aliases: ['太阴', '六合', '勾绞', '贯索', '平'],
     color: '#4CAF50'
   },
@@ -57,7 +57,7 @@ export const EVIL_STAR = {
   LONG_DE: {
     name: '朱雀',
     luckLevel: '吉',
-    desc: '主贵人、庇护、解厄，可化小凶',
+    desc: '主贵人、庇护、解厄、可化小凶',
     aliases: ['龙德', '朱雀', '紫微', '暴败', '天厄', '危'],
     color: '#4CAF50'
   },
@@ -71,7 +71,7 @@ export const EVIL_STAR = {
   FU_DE: {
     name: '贵神',
     luckLevel: '吉',
-    desc: '主祖荫、天赐福，可化凶为吉',
+    desc: '主祖荫、天赐福、可化凶为吉',
     aliases: ['福德', '贵神', '卷舌', '福星', '收'],
     color: '#4CAF50'
   },
