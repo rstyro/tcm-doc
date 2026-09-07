@@ -177,7 +177,16 @@ export default defineConfig({
                 text: '命',
                 items: [
                     {text: '命理师', link: '/fate/what'},
-                    {text: '八字', link: '/fate/bazi'},
+                    {
+                        text: '八字', items: [
+                            {text: '八字基础', link: '/fate/bazi'},
+                            {text: '十神', link: '/fate/shishen'},
+                            {text: '十二长生', link: '/fate/changsheng'},
+                            {text: '大运与流年', link: '/fate/dayun'},
+                            {text: '格局', link: '/fate/geju'},
+                            {text: '用神', link: '/fate/yongshen'},
+                        ]
+                    },
                     {text: '五行', link: '/fate/wuxing'},
                 ]
             },
@@ -266,8 +275,17 @@ export default defineConfig({
                     text: '命', collapsed: false,
                     items: [
                         {text: '命理师', link: '/fate/what'},
-                        {text: '八字', link: '/fate/bazi'},
-                        {text: '五行', link: '/fate/wuxing'},
+                        {
+                            text: '八字', collapsed: false,
+                            items: [
+                                {text: '八字基础', link: '/fate/bazi'},
+                                {text: '十神', link: '/fate/shishen'},
+                                {text: '十二长生', link: '/fate/changsheng'},
+                                {text: '大运与流年', link: '/fate/dayun'},
+                                {text: '格局', link: '/fate/geju'},
+                                {text: '用神', link: '/fate/yongshen'},
+                            ]
+                        },
                         {text: '太岁', link: '/fate/taisui'},
                         {
                             text: '查询工具', items: [
