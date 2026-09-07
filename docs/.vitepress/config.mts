@@ -286,6 +286,7 @@ export default defineConfig({
                                 {text: '用神', link: '/fate/yongshen'},
                             ]
                         },
+                        {text: '五行', link: '/fate/wuxing'},
                         {text: '太岁', link: '/fate/taisui'},
                         {
                             text: '查询工具', items: [
