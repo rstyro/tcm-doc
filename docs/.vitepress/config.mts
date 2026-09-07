@@ -180,6 +180,7 @@ export default defineConfig({
                     {
                         text: '八字', items: [
                             {text: '八字基础', link: '/fate/bazi'},
+                            {text: '八字怎么批', link: '/fate/piming'},
                             {text: '十神', link: '/fate/shishen'},
                             {text: '十二长生', link: '/fate/changsheng'},
                             {text: '大运与流年', link: '/fate/dayun'},
@@ -212,6 +213,7 @@ export default defineConfig({
             {
                 text: '查询工具', items: [
                     {text: '八字查询工具', link: '/fate/query/baziQuery'},
+                    {text: '节气查询工具', link: '/fate/query/jieqiQuery'},
                     {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
                 ]
             }
@@ -279,6 +281,7 @@ export default defineConfig({
                             text: '八字', collapsed: false,
                             items: [
                                 {text: '八字基础', link: '/fate/bazi'},
+                                {text: '八字怎么批', link: '/fate/piming'},
                                 {text: '十神', link: '/fate/shishen'},
                                 {text: '十二长生', link: '/fate/changsheng'},
                                 {text: '大运与流年', link: '/fate/dayun'},
@@ -291,6 +294,7 @@ export default defineConfig({
                         {
                             text: '查询工具', items: [
                                 {text: '八字查询工具', link: '/fate/query/baziQuery'},
+                                {text: '节气查询工具', link: '/fate/query/jieqiQuery'},
                                 {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
                             ]
                         },

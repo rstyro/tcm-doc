@@ -688,31 +688,42 @@ function SolarTerm() {
         return this.GAN[num % 10] + this.ZHI[num % 12];
     };
 
-    // 获取年干支
-    this.getYearGanZhi = function (year, month, day) {
+    // 获取年干支【以立春为年界】
+    this.getYearGanZhi = function (year, month, day, hour, minute) {
         if (year < 1) {
             throw new Error("暂不支持公元前年份计算，当前年份：" + year);
         }
-        let springDate = this.getSpringFestivalDate(year);
+        // 传统以"立春"为一年的分界（非春节/正月初一），且以立春交节的精确时刻换年
+        const lichunDate = this.getLichunDate(year);
 
-        const sYear = springDate.getFullYear();
-        const sMonth = springDate.getMonth();
-        const sDay = springDate.getDate();
+        // 时分缺省取 12:00，避免仅传日期时默认 00:00 造成的换年边界误判
+        const h = (hour === undefined || hour === null) ? 12 : hour;
+        const mi = (minute === undefined || minute === null) ? 0 : minute;
+        const date2 = new Date(year, month - 1, day, h, mi);
 
-        const date2 = new Date(year, month - 1, day);
-        const sDate = new Date(sYear, sMonth, sDay);
-
-        // 判断：传入的公历日期 是否在春节当天/之后
-        let isAfterSpring = date2 >= sDate;
-
-        // 春节前=上一年干支，春节后/当天=本年干支
-        const calcYear = isAfterSpring ? year : (year - 1);
+        // 判断：传入时间是否在当年立春交节时刻及之后
+        // 立春前=上一年干支，立春时刻后/当天交节后=本年干支
+        const calcYear = date2 >= lichunDate ? year : (year - 1);
 
         let stemOffset = calcYear - 4;
         let stemIndex = (stemOffset % 10 + 10) % 10;
         let branchOffset = calcYear - 4;
         let branchIndex = (branchOffset % 12 + 12) % 12;
         return this.GAN[stemIndex] + this.ZHI[branchIndex];
+    };
+
+    // 计算某年"立春"的交节时刻（含时分秒），用于年干支换年分界
+    this.getLichunDate = function (y) {
+        if (y < 1) {
+            throw new Error("暂不支持公元前年份计算，当前年份：" + y);
+        }
+        // 立春为太阳黄经 315°，角度索引 21（与 getSolarTermDate 中立春项同一算法）
+        const baseJd = 365.2422 * (y - 2000 - 1);
+        const q = this.jiaoCal(baseJd + 21 * 15.2, 21 * 15, 0);
+        const qJD = q + this.J2000 + 8 / 24;
+        this.setFromJD(qJD, true);
+        const dateStr = this.toStr().trim();
+        return new Date(dateStr.replace(/-/g, '/'));
     };
 
     // 获取当年春节的日期
@@ -1014,7 +1025,7 @@ function SolarTerm() {
 // ===== 第三步：原有方法完整升级（追加天干+地支十神所有字段） =====
     this.getGanZhiByGregorian = function (dateStr) {
         let ld = this.parseDateStr(dateStr);
-        let yearGanZhi = this.getYearGanZhi(ld.y, ld.m, ld.d);
+        let yearGanZhi = this.getYearGanZhi(ld.y, ld.m, ld.d, ld.h, ld.mi);
         let monthGanZhi = this.getGanZhiOfMonth(ld.y, ld.m, ld.d);
         let dayGanZhi = this.getGanZhiOfDay(ld.y, ld.m, ld.d);
         let hourGanZhi = this.getGanZhiOfHour(dateStr);
