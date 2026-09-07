@@ -154,7 +154,15 @@ export default defineConfig({
         nav: [
             {text: '首页', link: '/'},
             {
-                text: '山', link: '/shan/start',
+                text: '山',
+                items: [
+                    {text: '介绍', link: '/shan/start'},
+                    {text: '食饵', link: '/shan/shier'},
+                    {text: '筑基', link: '/shan/zhuji'},
+                    {text: '玄典', link: '/shan/xuandian'},
+                    {text: '拳法', link: '/shan/quanfa'},
+                    {text: '符咒', link: '/shan/fuzhou'},
+                ]
             },
             {
                 text: '医',
@@ -174,7 +182,14 @@ export default defineConfig({
                 ]
             },
             {
-                text: '相', link: '/face/start',
+                text: '相',
+                items: [
+                    {text: '介绍', link: '/face/start'},
+                    {text: '人相·面相', link: '/face/mianxiang'},
+                    {text: '人相·手相', link: '/face/shouxiang'},
+                    {text: '名相', link: '/face/mingxiang'},
+                    {text: '家相·墓相（风水）', link: '/face/fengshui'},
+                ]
             },
             {
                 text: '卜',
@@ -194,6 +209,31 @@ export default defineConfig({
         ],
 
         sidebar: {
+            '/shan/': [
+                {
+                    text: '山', collapsed: false,
+                    items: [
+                        {text: '介绍', link: '/shan/start'},
+                        {text: '食饵', link: '/shan/shier'},
+                        {text: '筑基', link: '/shan/zhuji'},
+                        {text: '玄典', link: '/shan/xuandian'},
+                        {text: '拳法', link: '/shan/quanfa'},
+                        {text: '符咒', link: '/shan/fuzhou'},
+                    ]
+                }
+            ],
+            '/face/': [
+                {
+                    text: '相', collapsed: false,
+                    items: [
+                        {text: '介绍', link: '/face/start'},
+                        {text: '人相·面相', link: '/face/mianxiang'},
+                        {text: '人相·手相', link: '/face/shouxiang'},
+                        {text: '名相', link: '/face/mingxiang'},
+                        {text: '家相·墓相（风水）', link: '/face/fengshui'},
+                    ]
+                }
+            ],
             '/tcm/': [
                 {
                     text: '中医', collapsed: true,
@@ -250,15 +290,15 @@ export default defineConfig({
                     items: [
                         {text: '前言', link: '/divination/shiyi/what'},
                         {text: '彖传(上)', link: '/divination/shiyi/shiyi_1'},
-                        // {text: '彖传(下)', link: '/divination/shiyi/shiyi_2'},
-                        // {text: '象传(上)', link: '/divination/shiyi/shiyi_3'},
-                        // {text: '象传(下)', link: '/divination/shiyi/shiyi_4'},
-                        // {text: '文言传', link: '/divination/shiyi/shiyi_5'},
-                        // {text: '系辞(上)', link: '/divination/shiyi/shiyi_6'},
-                        // {text: '系辞(下)', link: '/divination/shiyi/shiyi_7'},
-                        // {text: '说卦传', link: '/divination/shiyi/shiyi_8'},
-                        // {text: '序卦传', link: '/divination/shiyi/shiyi_9'},
-                        // {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
+                    {text: '彖传(下)', link: '/divination/shiyi/shiyi_2'},
+                    {text: '象传(上)', link: '/divination/shiyi/shiyi_3'},
+                    {text: '象传(下)', link: '/divination/shiyi/shiyi_4'},
+                    {text: '文言传', link: '/divination/shiyi/shiyi_5'},
+                    {text: '系辞(上)', link: '/divination/shiyi/shiyi_6'},
+                    {text: '系辞(下)', link: '/divination/shiyi/shiyi_7'},
+                    {text: '说卦传', link: '/divination/shiyi/shiyi_8'},
+                    {text: '序卦传', link: '/divination/shiyi/shiyi_9'},
+                    {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
                     ]
                 }
             ]
