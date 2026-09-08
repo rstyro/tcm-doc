@@ -1,5 +1,9 @@
 import {defineConfig} from 'vitepress'
 
+// 站点部署基路径（与下方 base 保持一致），用于拼接静态资源绝对路径
+const BASE = '/tcm-doc/';
+const withBase = (path) => (path.startsWith(BASE) ? path : `${BASE}${path.replace(/^\//, '')}`);
+
 
 const itemsLength = 64;
 
@@ -143,14 +147,28 @@ function numberToChinese(number) {
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     title: "玄学",
-    titleTemplate: 'rstyro',
-    description: "中医相关文档",
+    description: "山、医、命、相、卜 五术经典研读与资料整理：周易六十四卦、黄帝内经、倪注伤寒论、八字命理等典籍原文与学习笔记。",
     assetsDir: 'assets',
     base: '/tcm-doc/',
-    head: [['link', {rel: 'icon', href: 'logo.png'}]],
+    head: [
+        ['link', {rel: 'icon', href: withBase('/logo.png')}],
+        ['meta', {property: 'og:type', content: 'website'}],
+        ['meta', {property: 'og:site_name', content: '玄学'}],
+        ['meta', {property: 'og:title', content: '玄学 · 山医命相卜五术经典'}],
+        ['meta', {property: 'og:description', content: '山、医、命、相、卜 五术经典研读与资料整理：周易六十四卦、黄帝内经、倪注伤寒论、八字命理等典籍原文与学习笔记。'}],
+        ['meta', {property: 'og:image', content: withBase('/logo.png')}],
+        ['meta', {name: 'twitter:card', content: 'summary'}],
+    ],
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
-        logo: '/logo.png',
+        logo: withBase('/logo.png'),
+        lastUpdated: {
+            text: '最后更新于',
+            formatOptions: {
+                dateStyle: 'medium',
+                timeStyle: 'short'
+            }
+        },
         nav: [
             {text: '首页', link: '/'},
             {
@@ -177,6 +195,9 @@ export default defineConfig({
                 text: '命',
                 items: [
                     {text: '命理师', link: '/fate/what'},
+                    {text: '紫微斗数', link: '/fate/ziwei'},
+                    {text: '六爻', link: '/fate/liuyao'},
+                    {text: '梅花易数', link: '/fate/meihua'},
                     {
                         text: '八字', items: [
                             {text: '八字基础', link: '/fate/bazi'},
@@ -277,6 +298,9 @@ export default defineConfig({
                     text: '命', collapsed: false,
                     items: [
                         {text: '命理师', link: '/fate/what'},
+                        {text: '紫微斗数', link: '/fate/ziwei'},
+                        {text: '六爻', link: '/fate/liuyao'},
+                        {text: '梅花易数', link: '/fate/meihua'},
                         {
                             text: '八字', collapsed: false,
                             items: [
@@ -332,10 +356,37 @@ export default defineConfig({
         ],
         footer: {
             message: 'Released under the MIT License.',
-            copyright: 'Copyright © 2024-<a href="https://github.com/rstyro">rstyro</a>'
+            copyright: `Copyright © ${new Date().getFullYear()}-<a href="https://github.com/rstyro">rstyro</a>`
+        },
+        // 文档页脚导航
+        docFooter: {
+            prev: '上一页',
+            next: '下一页'
+        },
+        // 编辑链接
+        editLink: {
+            pattern: 'https://github.com/rstyro/dynasty-chronicles/edit/main/docs/:path',
+            text: '在 GitHub 上编辑此页'
         },
         search: {
-            provider: 'local'
+            provider: 'local',
+            options: {
+                translations: {
+                    button: {
+                        buttonText: '搜索',
+                        buttonAriaLabel: '搜索文档'
+                    },
+                    modal: {
+                        noResultsText: '未找到相关结果',
+                        resetButtonTitle: '清除查询',
+                        footer: {
+                            selectText: '选择',
+                            navigateText: '切换',
+                            closeText: '关闭'
+                        }
+                    }
+                }
+            }
         },
         outline: 'deep'
     }
