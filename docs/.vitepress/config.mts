@@ -97,6 +97,9 @@ function getZhouYiSidebar() {
     let items: {}[] = [{
         text: '《周易》是什么？',
         link: '/divination/zhouyi/what.md'
+    }, {
+        text: '六十四卦合订（全览）',
+        link: '/divination/zhouyi/zhouyi.md'
     }]
     for (let i = 0; i < GUA_64.length; i++) {
         let gua = GUA_64[i];
@@ -227,6 +230,7 @@ export default defineConfig({
                 items: [
                     {text: '五术之卜', link: '/divination/start'},
                     {text: '周易', link: '/divination/zhouyi/what'},
+                    {text: '六十四卦合订', link: '/divination/zhouyi/zhouyi'},
                     {text: '十翼', link: '/divination/shiyi/what'},
                 ]
 
@@ -365,7 +369,7 @@ export default defineConfig({
         },
         // 编辑链接
         editLink: {
-            pattern: 'https://github.com/rstyro/dynasty-chronicles/edit/main/docs/:path',
+            pattern: 'https://github.com/rstyro/tcm-doc/edit/main/docs/:path',
             text: '在 GitHub 上编辑此页'
         },
         search: {
