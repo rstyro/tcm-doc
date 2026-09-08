@@ -1,0 +1,63 @@
+/* ============================================================
+ * tcm-doc 轻国风点缀
+ * 原则：以 VitePress 默认白主题为主，不覆盖默认色板/背景，
+ * 只在个别细节上保留一点点东方书卷气。
+ * ============================================================ */
+
+/* ---------- 导航徽标：圆形展示（logo.png 本身为圆形图） ---------- */
+.VPNavBarTitle .VPImage,
+.VPNavBarTitle img {
+  border-radius: 50%;
+}
+
+/* ---------- Hero 副标题（山 · 医 · 命 · 相 · 卜） ---------- */
+/*
+ * 默认主题中 .name 与 .text 共用大字号（桌面 56px），
+ * 此处仅把副标题收紧到合适的单行尺寸，避免折行；
+ * 字体沿用默认无衬线，保证渲染锐利、观感接近默认白主题。
+ */
+.VPHero .text {
+  font-size: clamp(18px, 3.4vw, 34px);
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  color: var(--vp-c-text-1);
+}
+
+/* ---------- Hero 引言：小楷点缀（唯一的衬线元素） ---------- */
+.VPHero .tagline {
+  font-family: 'Kaiti SC', 'KaiTi', 'STKaiti', 'Microsoft YaHei', serif;
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 0.03em;
+  color: var(--vp-c-text-2);
+}
+
+@media (min-width: 960px) {
+  .VPHero .tagline {
+    font-size: 22px;
+  }
+}
+
+/* ---------- Feature 卡片：白底 + 克制的悬浮动效 ---------- */
+.VPFeatures .VPFeature {
+  border-radius: 14px;
+  background-color: var(--vp-c-bg-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+    border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.VPFeatures .VPFeature:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(60, 60, 67, 0.08);
+  border-color: var(--vp-c-brand-1);
+}
+
+.VPFeatures .VPFeature .icon {
+  border-radius: 12px;
+}
+
+/* ---------- 页脚：保留默认分隔，仅微调 ---------- */
+.VPFooter {
+  border-top: 1px solid var(--vp-c-divider);
+}
