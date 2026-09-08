@@ -181,6 +181,7 @@ export default defineConfig({
                 text: '山',
                 items: [
                     {text: '介绍', link: '/shan/start'},
+                    {text: '功法导览', link: '/shan/gongfa'},
                     {text: '食饵', link: '/shan/shier'},
                     {text: '筑基', link: '/shan/zhuji'},
                     {text: '玄典', link: '/shan/xuandian'},
@@ -191,9 +192,10 @@ export default defineConfig({
             {
                 text: '医',
                 items: [
-                    {text: '介绍', link: '/tcm/introduce'},
+                    {text: '中医', link: '/tcm/introduce'},
                     {text: '黄帝内经', link: '/tcm/huangdi/what'},
                     {text: '倪注伤寒论', link: '/tcm/shanghanlun/start'},
+                    {text: '金匮要略', link: '/tcm/jingui/what'},
 
                 ]
             },
@@ -201,21 +203,10 @@ export default defineConfig({
                 text: '命',
                 items: [
                     {text: '命理师', link: '/fate/what'},
+                    {text: '八字',link: '/fate/bazi'},
                     {text: '紫微斗数', link: '/fate/ziwei'},
                     {text: '六爻', link: '/fate/liuyao'},
                     {text: '梅花易数', link: '/fate/meihua'},
-                    {
-                        text: '八字', items: [
-                            {text: '八字基础', link: '/fate/bazi'},
-                            {text: '八字怎么批', link: '/fate/piming'},
-                            {text: '十神', link: '/fate/shishen'},
-                            {text: '十二长生', link: '/fate/changsheng'},
-                            {text: '大运与流年', link: '/fate/dayun'},
-                            {text: '格局', link: '/fate/geju'},
-                            {text: '用神', link: '/fate/yongshen'},
-                        ]
-                    },
-                    {text: '五行', link: '/fate/wuxing'},
                 ]
             },
             {
@@ -254,6 +245,7 @@ export default defineConfig({
                     text: '山', collapsed: false,
                     items: [
                         {text: '介绍', link: '/shan/start'},
+                        {text: '功法导览', link: '/shan/gongfa'},
                         {text: '食饵', link: '/shan/shier'},
                         {text: '筑基', link: '/shan/zhuji'},
                         {text: '玄典', link: '/shan/xuandian'},
@@ -279,14 +271,15 @@ export default defineConfig({
                     text: '中医', collapsed: true,
                     items: [
                         {text: '介绍', link: '/tcm/introduce'},
+                        {text: '古代中药重量单位换算', link: '/tcm/unit'},
                     ]
                 },
                 {
-                    text: '黄帝内经', collapsed: false,
+                    text: '黄帝内经', collapsed: true,
                     items: getHuangDiSidebar()
                 },
                 {
-                    text: '倪注伤寒论', collapsed: false,
+                    text: '倪注伤寒论', collapsed: true,
                     items: [
                         {text: '前言', link: '/tcm/shanghanlun/start'},
                         {text: '辨太阳病脉证并治法上篇', link: '/tcm/shanghanlun/taiyang1'},
@@ -297,7 +290,12 @@ export default defineConfig({
                         {text: '辨太阴病脉证并治法', link: '/tcm/shanghanlun/taiyin'},
                         {text: '辨少阴病脉证并治法', link: '/tcm/shanghanlun/shaoyin'},
                         {text: '辨厥阴病脉证并治法', link: '/tcm/shanghanlun/jueyin'},
-                        {text: '古代中药重量单位换算', link: '/tcm/shanghanlun/unit'},
+                    ]
+                },
+                {
+                    text: '金匮要略', collapsed: false,
+                    items: [
+                        {text: '导言与篇目', link: '/tcm/jingui/what'},
                     ]
                 }
             ],
@@ -306,9 +304,15 @@ export default defineConfig({
                     text: '命', collapsed: false,
                     items: [
                         {text: '命理师', link: '/fate/what'},
-                        {text: '紫微斗数', link: '/fate/ziwei'},
-                        {text: '六爻', link: '/fate/liuyao'},
-                        {text: '梅花易数', link: '/fate/meihua'},
+                        {
+                            text: '基础概念', collapsed: false,
+                            items: [
+                                {text: '天干地支', link: '/fate/ganzhi'},
+                                {text: '纳音', link: '/fate/nayin'},
+                                {text: '神煞', link: '/fate/shensha'},
+                            ]
+                        },
+                        {text: '五行', link: '/fate/wuxing'},
                         {
                             text: '八字', collapsed: false,
                             items: [
@@ -321,8 +325,10 @@ export default defineConfig({
                                 {text: '用神', link: '/fate/yongshen'},
                             ]
                         },
-                        {text: '五行', link: '/fate/wuxing'},
                         {text: '太岁', link: '/fate/taisui'},
+                        {text: '紫微斗数', link: '/fate/ziwei'},
+                        {text: '六爻', link: '/fate/liuyao'},
+                        {text: '梅花易数', link: '/fate/meihua'},
                         {
                             text: '查询工具', items: [
                                 {text: '八字查询工具', link: '/fate/query/baziQuery'},
