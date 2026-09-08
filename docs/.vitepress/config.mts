@@ -98,6 +98,9 @@ function getZhouYiSidebar() {
         text: '《周易》是什么？',
         link: '/divination/zhouyi/what.md'
     }, {
+        text: '八卦基础',
+        link: '/divination/zhouyi/bagua.md'
+    }, {
         text: '六十四卦合订（全览）',
         link: '/divination/zhouyi/zhouyi.md'
     }]
@@ -230,6 +233,7 @@ export default defineConfig({
                 items: [
                     {text: '五术之卜', link: '/divination/start'},
                     {text: '周易', link: '/divination/zhouyi/what'},
+                    {text: '八卦基础', link: '/divination/zhouyi/bagua'},
                     {text: '六十四卦合订', link: '/divination/zhouyi/zhouyi'},
                     {text: '十翼', link: '/divination/shiyi/what'},
                 ]

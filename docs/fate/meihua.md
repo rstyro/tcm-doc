@@ -39,4 +39,4 @@
 
 ## 参见
 
-- 卦象经义可参见《[周易六十四卦](/divination/zhouyi/what)》；需要“装卦断应期”的体系可参《[六爻](/fate/liuyao)》。
+- 卦象经义可参见《[周易六十四卦](/divination/zhouyi/what)》；八卦符号、方位与取象可先读《[八卦基础](/divination/zhouyi/bagua)》；需要"装卦断应期"的体系可参《[六爻](/fate/liuyao)》。
