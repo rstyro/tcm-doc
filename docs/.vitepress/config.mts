@@ -123,6 +123,46 @@ function getHuangDiSidebar(len = 24) {
     return items
 }
 
+const JINGUI_CHAPTERS = [
+    '脏腑经络先后病脉证',
+    '痉湿暍病脉证',
+    '百合狐惑阴阳毒病脉证',
+    '疟病脉证并治',
+    '中风历节病脉证并治',
+    '血痹虚劳病脉证并治',
+    '肺痿肺痈咳嗽上气病脉证治',
+    '奔豚气病脉证治',
+    '胸痹心痛短气病脉证治',
+    '腹满寒疝宿食病脉证治',
+    '五脏风寒积聚病脉证并治',
+    '痰饮咳嗽病脉证并治',
+    '消渴小便不利淋病脉证并治',
+    '水气病脉证并治',
+    '黄疸病脉证并治',
+    '惊悸吐衄下血胸满瘀血病脉证治',
+    '呕吐哕下利病脉证治',
+    '疮痈肠痈浸淫病脉证并治',
+    '趺蹶手指臂肿转筋阴狐疝蛔虫病脉证治',
+    '妇人妊娠病脉证并治',
+    '妇人产后病脉证治',
+    '妇人杂病脉证并治',
+    '杂疗方',
+    '禽兽鱼虫禁忌并治',
+    '果实菜谷禁忌并治',
+]
+
+function getJingGuiSidebar() {
+    let items: {}[] = [{
+        text: '导言与篇目',
+        link: '/tcm/jingui/what.md'
+    }]
+    for (let i = 0; i < JINGUI_CHAPTERS.length; i++) {
+        items.push({text: `第${i + 1}篇 · ${JINGUI_CHAPTERS[i]}`, link: `/tcm/jingui/jingui${i + 1}`})
+    }
+    return items
+}
+
+
 function numberToChinese(number) {
     const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
     const chineseUnits = ['', '十', '百', '千', '万', '亿'];
@@ -194,7 +234,7 @@ export default defineConfig({
                 items: [
                     {text: '中医', link: '/tcm/introduce'},
                     {text: '黄帝内经', link: '/tcm/huangdi/what'},
-                    {text: '倪注伤寒论', link: '/tcm/shanghanlun/start'},
+                    {text: '倪注·伤寒论', link: '/tcm/shanghanlun/start'},
                     {text: '金匮要略', link: '/tcm/jingui/what'},
 
                 ]
@@ -290,7 +330,7 @@ export default defineConfig({
                     items: getHuangDiSidebar()
                 },
                 {
-                    text: '倪注伤寒论', collapsed: true,
+                    text: '倪注·伤寒论', collapsed: true,
                     items: [
                         {text: '前言', link: '/tcm/shanghanlun/start'},
                         {text: '辨太阳病脉证并治法上篇', link: '/tcm/shanghanlun/taiyang1'},
@@ -305,9 +345,7 @@ export default defineConfig({
                 },
                 {
                     text: '金匮要略', collapsed: false,
-                    items: [
-                        {text: '导言与篇目', link: '/tcm/jingui/what'},
-                    ]
+                    items: getJingGuiSidebar()
                 }
             ],
             '/fate/': [
