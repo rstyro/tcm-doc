@@ -244,12 +244,23 @@ export default defineConfig({
                 {
                     text: '山', collapsed: false,
                     items: [
-                        {text: '介绍', link: '/shan/start'},
-                        {text: '功法导览', link: '/shan/gongfa'},
+                        {
+                            text: '山术入门', collapsed: false,
+                            items: [
+                                {text: '介绍', link: '/shan/start'},
+                                {text: '功法导览', link: '/shan/gongfa'},
+                            ]
+                        },
                         {text: '食饵', link: '/shan/shier'},
                         {text: '筑基', link: '/shan/zhuji'},
                         {text: '玄典', link: '/shan/xuandian'},
-                        {text: '拳法', link: '/shan/quanfa'},
+                        {
+                            text: '拳法', collapsed: false,
+                            items: [
+                                {text: '拳法导览', link: '/shan/quanfa'},
+                                {text: '导引·八段锦', link: '/shan/baduanjin'},
+                            ]
+                        },
                         {text: '符咒', link: '/shan/fuzhou'},
                     ]
                 }
