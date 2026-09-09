@@ -112,13 +112,10 @@ function getZhouYiSidebar() {
 }
 
 
-function getHuangDiSidebar(len = 24) {
-    let items: {}[] = [{
-        text: '《黄帝内经》是什么？',
-        link: '/tcm/huangdi/what.md'
-    }]
+function getSuWenSidebar(len = 24) {
+    let items: {}[] = []
     for (let i = 1; i <= len; i++) {
-        items.push({text: `素问·卷${numberToChinese(i)}`, link: `/tcm/huangdi/huangdi_${i}`})
+        items.push({text: `素问·卷${numberToChinese(i)}`, link: `/tcm/huangdi/suwen/suwen${i}`})
     }
     return items
 }
@@ -158,6 +155,98 @@ function getJingGuiSidebar() {
     }]
     for (let i = 0; i < JINGUI_CHAPTERS.length; i++) {
         items.push({text: `第${i + 1}篇 · ${JINGUI_CHAPTERS[i]}`, link: `/tcm/jingui/jingui${i + 1}`})
+    }
+    return items
+}
+
+const LINGSHU_CHAPTERS = [
+    '九针十二原',
+    '本输',
+    '小针解',
+    '邪气藏府病形',
+    '根结',
+    '寿夭刚柔',
+    '官针',
+    '本神',
+    '终始',
+    '经脉',
+    '经别',
+    '经水',
+    '经筋',
+    '骨度',
+    '五十营',
+    '营气',
+    '脉度',
+    '营卫生会',
+    '四时气',
+    '五邪',
+    '寒热病',
+    '癫狂',
+    '热病',
+    '厥病',
+    '病本',
+    '杂病',
+    '周痹',
+    '口问',
+    '师传',
+    '决气',
+    '肠胃',
+    '平人绝谷',
+    '海论',
+    '五乱',
+    '胀论',
+    '五癃津液别',
+    '五阅五使',
+    '逆顺肥瘦',
+    '血络论',
+    '阴阳清浊',
+    '阴阳系日月',
+    '病传',
+    '淫邪发梦',
+    '顺气一日分为四时',
+    '外揣',
+    '五变',
+    '本藏',
+    '禁服',
+    '五色',
+    '论勇',
+    '背腧',
+    '卫气',
+    '论痛',
+    '天年',
+    '逆顺',
+    '五味',
+    '水胀',
+    '贼风',
+    '卫气失常',
+    '玉版',
+    '五禁',
+    '动输',
+    '五味论',
+    '阴阳二十五人',
+    '五音五味',
+    '百病始生',
+    '行针',
+    '上膈',
+    '忧恚无言',
+    '寒热',
+    '邪客',
+    '通天',
+    '官能',
+    '论疾诊尺',
+    '刺节真邪',
+    '卫气行',
+    '九宫八风',
+    '九针论',
+    '岁露论',
+    '大惑论',
+    '痈疽',
+]
+
+function getLingShuSidebar() {
+    let items: {}[] = []
+    for (let i = 0; i < LINGSHU_CHAPTERS.length; i++) {
+        items.push({text: `第${i + 1}篇 · ${LINGSHU_CHAPTERS[i]}`, link: `/tcm/huangdi/lingshu/lingshu${i + 1}`})
     }
     return items
 }
@@ -327,7 +416,17 @@ export default defineConfig({
                 },
                 {
                     text: '黄帝内经', collapsed: true,
-                    items: getHuangDiSidebar()
+                    items: [
+                        {text: '《黄帝内经》是什么？', link: '/tcm/huangdi/what.md'},
+                        {
+                            text: '素问', collapsed: true,
+                            items: getSuWenSidebar()
+                        },
+                        {
+                            text: '灵枢', collapsed: true,
+                            items: getLingShuSidebar()
+                        },
+                    ]
                 },
                 {
                     text: '倪注·伤寒论', collapsed: true,
