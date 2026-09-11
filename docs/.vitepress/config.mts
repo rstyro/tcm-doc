@@ -290,6 +290,41 @@ function getBenCaoSidebar() {
     return items
 }
 
+// 《中药学》（新世纪第四版·钟赣生主编）各论 第八~二十八章 + 附录
+const ZHONGYAOXUE_SECTIONS: string[][] = [
+    ['jiebiao', '第八章 解表药'],
+    ['qingre', '第九章 清热药'],
+    ['xiexia', '第十章 泻下药'],
+    ['qufengshi', '第十一章 祛风湿药'],
+    ['huashi', '第十二章 化湿药'],
+    ['lishuishenshi', '第十三章 利水渗湿药'],
+    ['wenli', '第十四章 温里药'],
+    ['liqi', '第十五章 理气药'],
+    ['xiaoshi', '第十六章 消食药'],
+    ['quchong', '第十七章 驱虫药'],
+    ['zhixue', '第十八章 止血药'],
+    ['huoxuehuayu', '第十九章 活血化瘀药'],
+    ['huatanzhikepingchuan', '第二十章 化痰止咳平喘药'],
+    ['anshen', '第二十一章 安神药'],
+    ['pingganxifeng', '第二十二章 平肝息风药'],
+    ['kaiqiao', '第二十三章 开窍药'],
+    ['buxu', '第二十四章 补虚药'],
+    ['shouse', '第二十五章 收涩药'],
+    ['yongtu', '第二十六章 涌吐药'],
+    ['gongdushachongzhiyang', '第二十七章 攻毒杀虫止痒药'],
+    ['baduhuafushengji', '第二十八章 拔毒化腐生肌药'],
+    ['bingzheng-yongyao', '附录 临床常见百种病证用药简介'],
+]
+
+function getZhongYaoXueSidebar() {
+    let items: {}[] = []
+    for (let i = 0; i < ZHONGYAOXUE_SECTIONS.length; i++) {
+        let section = ZHONGYAOXUE_SECTIONS[i]
+        items.push({text: section[1], link: `/tcm/zhongyaoxue/${section[0]}`})
+    }
+    return items
+}
+
 
 function numberToChinese(number) {
     const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -368,6 +403,7 @@ export default defineConfig({
                     {text: '倪注·伤寒论', link: '/tcm/shanghanlun/start'},
                     {text: '金匮要略', link: '/tcm/jingui/what'},
                     {text: '本草纲目', link: '/tcm/bencao/yuanxu'},
+                    {text: '中药学', link: '/tcm/zhongyaoxue/jiebiao'},
 
                 ]
             },
@@ -492,6 +528,10 @@ export default defineConfig({
                 {
                     text: '本草纲目', collapsed: true,
                     items: getBenCaoSidebar()
+                },
+                {
+                    text: '中药学', collapsed: true,
+                    items: getZhongYaoXueSidebar()
                 }
             ],
             '/fate/': [
@@ -572,11 +612,6 @@ export default defineConfig({
         docFooter: {
             prev: '上一页',
             next: '下一页'
-        },
-        // 编辑链接
-        editLink: {
-            pattern: 'https://github.com/rstyro/tcm-doc/edit/main/docs/:path',
-            text: '在 GitHub 上编辑此页'
         },
         search: {
             provider: 'local',
