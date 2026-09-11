@@ -98,9 +98,6 @@ function getZhouYiSidebar() {
         text: '《周易》是什么？',
         link: '/divination/zhouyi/what.md'
     }, {
-        text: '八卦基础',
-        link: '/divination/zhouyi/bagua.md'
-    }, {
         text: '六十四卦合订（全览）',
         link: '/divination/zhouyi/zhouyi.md'
     }]
@@ -252,6 +249,48 @@ function getLingShuSidebar() {
 }
 
 
+const BENCAO_SECTIONS: string[][] = [
+    ['yuanxu', '原序'],
+    ['xuli', '序例'],
+    ['baibing-shang', '百病主治药上'],
+    ['baibing-xia', '百病主治药下'],
+    ['caobu1', '草部·山草类上'],
+    ['caobu2', '草部·山草类下'],
+    ['caobu3', '草部·芳草类'],
+    ['caobu4', '草部·隰草类上'],
+    ['caobu5', '草部·隰草类下'],
+    ['caobu6', '草部·毒草类'],
+    ['caobu7', '草部·蔓草类'],
+    ['caobu8', '草部·水草类'],
+    ['caobu9', '草部·石草类'],
+    ['caobu10', '草部·苔类杂草'],
+    ['mubu', '木部'],
+    ['tubu', '土部'],
+    ['huobu', '火部'],
+    ['gubu', '谷部'],
+    ['guobu', '果部'],
+    ['linbu', '鳞部'],
+    ['shoubu', '兽部'],
+    ['qinbu', '禽部'],
+    ['chongbu', '虫部'],
+    ['jiebu', '介部'],
+    ['caibu', '菜部'],
+    ['shuibu', '水部'],
+    ['renbu', '人部'],
+    ['jinshibu', '金石部'],
+    ['fuqibu', '服器部'],
+]
+
+function getBenCaoSidebar() {
+    let items: {}[] = []
+    for (let i = 0; i < BENCAO_SECTIONS.length; i++) {
+        let section = BENCAO_SECTIONS[i]
+        items.push({text: `《本草纲目》${section[1]}`, link: `/tcm/bencao/${section[0]}`})
+    }
+    return items
+}
+
+
 function numberToChinese(number) {
     const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
     const chineseUnits = ['', '十', '百', '千', '万', '亿'];
@@ -290,7 +329,10 @@ export default defineConfig({
         ['meta', {property: 'og:type', content: 'website'}],
         ['meta', {property: 'og:site_name', content: '玄学'}],
         ['meta', {property: 'og:title', content: '玄学 · 山医命相卜五术经典'}],
-        ['meta', {property: 'og:description', content: '山、医、命、相、卜 五术经典研读与资料整理：周易六十四卦、黄帝内经、倪注伤寒论、八字命理等典籍原文与学习笔记。'}],
+        ['meta', {
+            property: 'og:description',
+            content: '山、医、命、相、卜 五术经典研读与资料整理：周易六十四卦、黄帝内经、倪注伤寒论、八字命理等典籍原文与学习笔记。'
+        }],
         ['meta', {property: 'og:image', content: withBase('/logo.png')}],
         ['meta', {name: 'twitter:card', content: 'summary'}],
     ],
@@ -325,6 +367,7 @@ export default defineConfig({
                     {text: '黄帝内经', link: '/tcm/huangdi/what'},
                     {text: '倪注·伤寒论', link: '/tcm/shanghanlun/start'},
                     {text: '金匮要略', link: '/tcm/jingui/what'},
+                    {text: '本草纲目', link: '/tcm/bencao/yuanxu'},
 
                 ]
             },
@@ -332,7 +375,7 @@ export default defineConfig({
                 text: '命',
                 items: [
                     {text: '命理师', link: '/fate/what'},
-                    {text: '八字',link: '/fate/bazi'},
+                    {text: '八字', link: '/fate/bazi'},
                     {text: '紫微斗数', link: '/fate/ziwei'},
                     {text: '六爻', link: '/fate/liuyao'},
                     {text: '梅花易数', link: '/fate/meihua'},
@@ -443,8 +486,12 @@ export default defineConfig({
                     ]
                 },
                 {
-                    text: '金匮要略', collapsed: false,
+                    text: '金匮要略', collapsed: true,
                     items: getJingGuiSidebar()
+                },
+                {
+                    text: '本草纲目', collapsed: true,
+                    items: getBenCaoSidebar()
                 }
             ],
             '/fate/': [
@@ -489,6 +536,7 @@ export default defineConfig({
             ],
             '/divination/': [
                 {text: '五术之卜', link: '/divination/start'},
+                {text: '八卦基础', link: '/divination/zhouyi/bagua.md'},
                 {
                     text: '周易',
                     collapsed: false,
@@ -499,15 +547,15 @@ export default defineConfig({
                     items: [
                         {text: '前言', link: '/divination/shiyi/what'},
                         {text: '彖传(上)', link: '/divination/shiyi/shiyi_1'},
-                    {text: '彖传(下)', link: '/divination/shiyi/shiyi_2'},
-                    {text: '象传(上)', link: '/divination/shiyi/shiyi_3'},
-                    {text: '象传(下)', link: '/divination/shiyi/shiyi_4'},
-                    {text: '文言传', link: '/divination/shiyi/shiyi_5'},
-                    {text: '系辞(上)', link: '/divination/shiyi/shiyi_6'},
-                    {text: '系辞(下)', link: '/divination/shiyi/shiyi_7'},
-                    {text: '说卦传', link: '/divination/shiyi/shiyi_8'},
-                    {text: '序卦传', link: '/divination/shiyi/shiyi_9'},
-                    {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
+                        {text: '彖传(下)', link: '/divination/shiyi/shiyi_2'},
+                        {text: '象传(上)', link: '/divination/shiyi/shiyi_3'},
+                        {text: '象传(下)', link: '/divination/shiyi/shiyi_4'},
+                        {text: '文言传', link: '/divination/shiyi/shiyi_5'},
+                        {text: '系辞(上)', link: '/divination/shiyi/shiyi_6'},
+                        {text: '系辞(下)', link: '/divination/shiyi/shiyi_7'},
+                        {text: '说卦传', link: '/divination/shiyi/shiyi_8'},
+                        {text: '序卦传', link: '/divination/shiyi/shiyi_9'},
+                        {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
                     ]
                 }
             ]
