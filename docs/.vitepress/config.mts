@@ -325,6 +325,40 @@ function getZhongYaoXueSidebar() {
     return items
 }
 
+// 《方剂学》下篇 各论 第一章~第二十一章
+const FANGJIXUE_SECTIONS: string[][] = [
+    ['jiebiao', '第一章 解表剂'],
+    ['xiexia', '第二章 泻下剂'],
+    ['hejie', '第三章 和解剂'],
+    ['qingre', '第四章 清热剂'],
+    ['qushu', '第五章 祛暑剂'],
+    ['wenli', '第六章 温里剂'],
+    ['biaolishuangjie', '第七章 表里双解剂'],
+    ['buyi', '第八章 补益剂'],
+    ['guse', '第九章 固涩剂'],
+    ['anshen', '第十章 安神剂'],
+    ['kaiqiao', '第十一章 开窍剂'],
+    ['liqi', '第十二章 理气剂'],
+    ['lixue', '第十三章 理血剂'],
+    ['zhifeng', '第十四章 治风剂'],
+    ['zhizao', '第十五章 治燥剂'],
+    ['qushi', '第十六章 祛湿剂'],
+    ['qutan', '第十七章 祛痰剂'],
+    ['xiaoshi', '第十八章 消食剂'],
+    ['quchong', '第十九章 驱虫剂'],
+    ['yongtu', '第二十章 涌吐剂'],
+    ['yongyang', '第二十一章 治痈疡剂'],
+]
+
+function getFangJiXueSidebar() {
+    let items: {}[] = []
+    for (let i = 0; i < FANGJIXUE_SECTIONS.length; i++) {
+        let section = FANGJIXUE_SECTIONS[i]
+        items.push({text: section[1], link: `/tcm/fangjixue/${section[0]}`})
+    }
+    return items
+}
+
 
 function numberToChinese(number) {
     const chineseNumbers = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
@@ -404,6 +438,7 @@ export default defineConfig({
                     {text: '金匮要略', link: '/tcm/jingui/what'},
                     {text: '本草纲目', link: '/tcm/bencao/yuanxu'},
                     {text: '中药学', link: '/tcm/zhongyaoxue/jiebiao'},
+                    {text: '方剂学', link: '/tcm/fangjixue/jiebiao'},
 
                 ]
             },
@@ -532,6 +567,10 @@ export default defineConfig({
                 {
                     text: '中药学', collapsed: true,
                     items: getZhongYaoXueSidebar()
+                },
+                {
+                    text: '方剂学', collapsed: true,
+                    items: getFangJiXueSidebar()
                 }
             ],
             '/fate/': [
