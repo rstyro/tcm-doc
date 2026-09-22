@@ -1106,7 +1106,6 @@ function SolarTerm() {
     };
 
     this.getConstellation = function (month, day) {
-        console.log("month, day==", month, day)
         // 星座区间配置（完全保留你的原版配置，一行未改）
         const constellations = [
             {name: "摩羯座", start: "12-22", end: "01-19"},

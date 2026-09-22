@@ -466,10 +466,11 @@ export default defineConfig({
                 text: '命',
                 items: [
                     {text: '命理师', link: '/fate/what'},
+                    {text: '天干地支', link: '/fate/ganzhi'},
+                    {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
                     {text: '八字', link: '/fate/bazi'},
+                    {text: '日主旺衰', link: '/fate/wangshuai'},
                     {text: '紫微斗数', link: '/fate/ziwei'},
-                    {text: '六爻', link: '/fate/liuyao'},
-                    {text: '梅花易数', link: '/fate/meihua'},
                 ]
             },
             {
@@ -490,6 +491,8 @@ export default defineConfig({
                     {text: '八卦基础', link: '/divination/zhouyi/bagua'},
                     {text: '六十四卦合订', link: '/divination/zhouyi/zhouyi'},
                     {text: '十翼', link: '/divination/shiyi/what'},
+                    {text: '六爻', link: '/divination/liuyao'},
+                    {text: '梅花易数', link: '/divination/meihua'},
                 ]
 
             },
@@ -498,6 +501,7 @@ export default defineConfig({
                     {text: '八字查询工具', link: '/fate/query/baziQuery'},
                     {text: '节气查询工具', link: '/fate/query/jieqiQuery'},
                     {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
+                    {text: '八字合婚查询', link: '/fate/query/hehunQuery'},
                 ]
             }
         ],
@@ -602,6 +606,7 @@ export default defineConfig({
                             text: '基础概念', collapsed: false,
                             items: [
                                 {text: '天干地支', link: '/fate/ganzhi'},
+                                {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
                                 {text: '纳音', link: '/fate/nayin'},
                                 {text: '神煞', link: '/fate/shensha'},
                             ]
@@ -612,6 +617,7 @@ export default defineConfig({
                             items: [
                                 {text: '八字基础', link: '/fate/bazi'},
                                 {text: '八字怎么批', link: '/fate/piming'},
+                                {text: '日主旺衰', link: '/fate/wangshuai'},
                                 {text: '十神', link: '/fate/shishen'},
                                 {text: '十二长生', link: '/fate/changsheng'},
                                 {text: '大运与流年', link: '/fate/dayun'},
@@ -621,13 +627,12 @@ export default defineConfig({
                         },
                         {text: '太岁', link: '/fate/taisui'},
                         {text: '紫微斗数', link: '/fate/ziwei'},
-                        {text: '六爻', link: '/fate/liuyao'},
-                        {text: '梅花易数', link: '/fate/meihua'},
                         {
                             text: '查询工具', items: [
                                 {text: '八字查询工具', link: '/fate/query/baziQuery'},
                                 {text: '节气查询工具', link: '/fate/query/jieqiQuery'},
                                 {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
+                                {text: '八字合婚查询', link: '/fate/query/hehunQuery'},
                             ]
                         },
                     ]
@@ -655,6 +660,13 @@ export default defineConfig({
                         {text: '说卦传', link: '/divination/shiyi/shiyi_8'},
                         {text: '序卦传', link: '/divination/shiyi/shiyi_9'},
                         {text: '杂卦传', link: '/divination/shiyi/shiyi_10'},
+                    ]
+                },
+                {
+                    text: '易占流派', collapsed: false,
+                    items: [
+                        {text: '六爻', link: '/divination/liuyao'},
+                        {text: '梅花易数', link: '/divination/meihua'},
                     ]
                 }
             ]
