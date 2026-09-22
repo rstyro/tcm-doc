@@ -325,6 +325,18 @@ function getZhongYaoXueSidebar() {
     return items
 }
 
+// 《方剂学》上篇 总论（绪论 + 第一章~第六章 + 附）
+const FANGJIXUE_ZONGLUN_SECTIONS: string[][] = [
+    ['zonglun-xulun', '绪论'],
+    ['zonglun-qiyuan', '第一章 方剂的起源与发展'],
+    ['zonglun-zhifa', '第二章 方剂与治法'],
+    ['zonglun-fenlei', '第三章 方剂的分类'],
+    ['zonglun-jixing', '第四章 方剂的剂型'],
+    ['zonglun-jianfu', '第五章 方剂的煎服法'],
+    ['zonglun-zufang', '第六章 方剂的组方原则与变化'],
+    ['zonglun-duliangheng', '附 古今用药度量衡简释'],
+]
+
 // 《方剂学》下篇 各论 第一章~第二十一章
 const FANGJIXUE_SECTIONS: string[][] = [
     ['jiebiao', '第一章 解表剂'],
@@ -352,10 +364,18 @@ const FANGJIXUE_SECTIONS: string[][] = [
 
 function getFangJiXueSidebar() {
     let items: {}[] = []
-    for (let i = 0; i < FANGJIXUE_SECTIONS.length; i++) {
-        let section = FANGJIXUE_SECTIONS[i]
-        items.push({text: section[1], link: `/tcm/fangjixue/${section[0]}`})
-    }
+    items.push({
+        text: '上篇 总论', collapsed: false,
+        items: FANGJIXUE_ZONGLUN_SECTIONS.map(section => (
+            {text: section[1], link: `/tcm/fangjixue/${section[0]}`}
+        ))
+    })
+    items.push({
+        text: '下篇 各论', collapsed: false,
+        items: FANGJIXUE_SECTIONS.map(section => (
+            {text: section[1], link: `/tcm/fangjixue/${section[0]}`}
+        ))
+    })
     return items
 }
 
@@ -438,7 +458,7 @@ export default defineConfig({
                     {text: '金匮要略', link: '/tcm/jingui/what'},
                     {text: '本草纲目', link: '/tcm/bencao/yuanxu'},
                     {text: '中药学', link: '/tcm/zhongyaoxue/jiebiao'},
-                    {text: '方剂学', link: '/tcm/fangjixue/jiebiao'},
+                    {text: '方剂学', link: '/tcm/fangjixue/zonglun-xulun'},
 
                 ]
             },
