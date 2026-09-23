@@ -74,31 +74,51 @@
           </div>
 
           <div class="form-group">
-            <label for="citySelect" class="form-label">出生地：</label>
+            <label for="provinceSelect" class="form-label">出生地：</label>
             <div class="input-wrapper">
               <input
                   type="text"
                   class="date-input"
                   v-model="cityFilter"
                   placeholder="筛选：输入城市或省份，如「喀什」「四川」"
-                  aria-label="筛选城市"
+                  aria-label="筛选省份与城市"
               />
             </div>
-            <div class="input-wrapper" style="margin-top: 8px;">
-              <select
-                  id="citySelect"
-                  class="date-input select-input"
-                  :value="cityValue"
-                  @change="setCity($event.target.value)"
-              >
-                <option value="">未指定（按钟表时间排盘）</option>
-                <optgroup v-for="g in filteredCityGroups" :key="g.label" :label="g.label">
-                  <option v-for="c in g.cities" :key="c" :value="c">
+            <div class="city-cascade">
+              <div class="input-wrapper">
+                <select
+                    id="provinceSelect"
+                    class="date-input select-input"
+                    :value="provinceValue"
+                    @change="setProvince($event.target.value)"
+                >
+                  <option value="">未指定（按钟表时间排盘）</option>
+                  <option v-for="p in provinceOptions" :key="p" :value="p">{{ p }}</option>
+                  <option value="__custom__">自定义经度…</option>
+                </select>
+              </div>
+              <div class="input-wrapper">
+                <select
+                    id="citySelect"
+                    class="date-input select-input"
+                    :value="cityValue"
+                    :disabled="!cityDetail"
+                    @change="setCity($event.target.value)"
+                >
+                  <option value="">{{ cityPlaceholder }}</option>
+                  <optgroup v-if="cityCenter" label="全市（市中心）">
+                    <option :value="cityCenter">{{ cityCenter }}（东经 {{ cityLongitude[cityCenter] }}°）</option>
+                  </optgroup>
+                  <optgroup v-if="cityDistricts.length" label="按市辖区（更精确）">
+                    <option v-for="c in cityDistricts" :key="c" :value="c">
+                      {{ cityShortName(c) }}（东经 {{ cityLongitude[c] }}°）
+                    </option>
+                  </optgroup>
+                  <option v-for="c in cityCities" :key="c" :value="c">
                     {{ c }}（东经 {{ cityLongitude[c] }}°）
                   </option>
-                </optgroup>
-                <option value="__custom__">自定义经度…</option>
-              </select>
+                </select>
+              </div>
             </div>
             <p class="field-hint" v-if="cityFilterMiss">
               没有匹配的城市。可直接选「自定义经度…」手填东经度数。
@@ -116,8 +136,8 @@
               />
             </div>
             <p class="field-hint">
-              已收录 {{ cityCount }} 个出生地：地级行政区全量，直辖市与香港另含市辖区。
-              经度决定地方时——东八区中央经线为 120°E，偏西 1° 就慢 4 分钟，
+              已收录 {{ cityCount }} 个出生地，按 {{ provinceCount }} 个省级单元级联选择：地级行政区全量，
+              直辖市与香港另含市辖区。经度决定地方时——东八区中央经线为 120°E，偏西 1° 就慢 4 分钟，
               乌鲁木齐比钟表慢约 130 分钟，足以改变时柱。
             </p>
           </div>
@@ -302,6 +322,8 @@
       <!-- 时刻校核（第0层）-->
       <div class="analysis-section" v-if="moment">
         <h3 class="section-title">时刻校核</h3>
+
+        <p class="birth-echo">出生地：<strong>{{ birthPlaceText }}</strong></p>
 
         <div class="moment-steps">
           <div class="moment-step" v-for="s in moment.steps" :key="s.key">
@@ -627,6 +649,9 @@
 import { ref, computed, onMounted } from 'vue';
 import SolarTerm from '../utils/SolarTerm.js';
 import Bazi from '../utils/baziUtils.js';
+import {
+  PROVINCE_LABELS, provinceOfCity, provinceList, cityGroupsOf, hasCityHit, cityShortName
+} from '../utils/cityCascade.js';
 import { analyzeStructure } from '../utils/baziStructure.js';
 import { analyzeJudgment, daysAfterJieOf } from '../utils/baziJudgment.js';
 import { analyzeInference } from '../utils/baziInference.js';
@@ -673,7 +698,8 @@ const solarTerm = new SolarTerm();
 // ===== 第0层：时刻校准 =====
 // 输入框拿到的是「行政区时间」（北京时间），八字用的是天体时刻，两者相差两项：
 // 经度差（120°E 为准，偏西 1° 慢 4 分钟）与均时差（全年 ±16 分钟）。西部城市可达一个时辰以上。
-const cityValue = ref('');              // '' = 未指定；'__custom__' = 自定义经度
+const provinceValue = ref('');          // '' = 未指定；'__custom__' = 自定义经度；否则为省级单元名
+const cityValue = ref('');              // '' = 未指定；'__custom__' = 自定义经度；否则为城市 / 市辖区名
 const customLongitude = ref('116.41');
 const useTrueSolar = ref(true);
 const ziConvention = ref('nextDay');    // 23:00–23:59 的归属：'nextDay' 换日 / 'lateZi' 归当日
@@ -682,25 +708,40 @@ const moment = ref(null);
 // 校正是否真的改变了四柱（与「按钟表时间排盘」对比）
 const shiftedInfo = ref(null);
 
-const cityGroups = Bazi.CITY_GROUPS;
 const cityLongitude = Bazi.CITY_LONGITUDE;
 const cityCount = Bazi.CITY_COUNT;
+const provinceCount = PROVINCE_LABELS.length;
 const ziConventions = Bazi.ZI_CONVENTIONS;
 
-// 城市表有近 500 项，加一个筛选框——否则下拉要滚很久。
-// 支持输城市名或省名（如「喀什」「四川」），筛选后仍按省分组显示。
+// 出生地近 500 项，平铺成一个下拉要滚很久 —— 改成「省 → 市 / 区」两级级联：
+// 一级 34 项、二级最多 38 项（重庆）。筛选框保留，关键词同时缩小两级列表：
+// 输「喀什」一级只剩新疆、二级只剩喀什地区；输「四川」则整省保留（省名命中）。
 const cityFilter = ref('');
-const filteredCityGroups = computed(() => {
-  const q = cityFilter.value.trim();
-  if (!q) return cityGroups;
-  const hit = [];
-  for (const g of cityGroups) {
-    const cities = g.cities.filter(c => c.indexOf(q) >= 0 || g.label.indexOf(q) >= 0);
-    if (cities.length) hit.push({ label: g.label, cities });
-  }
-  return hit;
+
+const provinceOptions = computed(() => provinceList(cityFilter.value, provinceValue.value));
+
+const cityDetail = computed(() => {
+  const p = provinceValue.value;
+  if (!p || p === '__custom__') return null;   // 未指定 / 自定义经度：二级下拉停用
+  return cityGroupsOf(p, cityFilter.value, cityValue.value);
 });
-const cityFilterMiss = computed(() => cityFilter.value.trim() !== '' && filteredCityGroups.value.length === 0);
+const cityCenter = computed(() => (cityDetail.value ? cityDetail.value.center : ''));
+const cityDistricts = computed(() => (cityDetail.value ? cityDetail.value.districts : []));
+const cityCities = computed(() => (cityDetail.value ? cityDetail.value.cities : []));
+
+const cityPlaceholder = computed(() => {
+  if (!provinceValue.value) return '请先选择省份 / 直辖市';
+  if (provinceValue.value === '__custom__') return '已选「自定义经度」';
+  return '请选择城市 / 区（不选则不做经度校正）';
+});
+
+// 筛选无命中：全国都没有这个地名，或当前省内没有（后者只在「已选省份被兜住」时出现）
+const cityFilterMiss = computed(() => {
+  const q = cityFilter.value.trim();
+  if (!q) return false;
+  if (provinceList(q).length === 0) return true;
+  return !!cityDetail.value && !hasCityHit(cityDetail.value);
+});
 
 const solarOptions = [
   { label: '真太阳时', value: true },
@@ -716,6 +757,15 @@ const longitude = computed(() => {
   if (!cityValue.value) return null;
   const v = cityLongitude[cityValue.value];
   return typeof v === 'number' ? v : null;
+});
+
+// 「时刻校核」卡头部的出生地回显（级联后更要让人一眼确认到底按哪个点校正的）
+const birthPlaceText = computed(() => {
+  const v = cityValue.value;
+  if (!v) return '未指定（按钟表时间排盘）';
+  if (v === '__custom__') return `自定义经度（东经 ${customLongitude.value}°）`;
+  const lng = cityLongitude[v];
+  return `${v}（东经 ${lng}°）`;
 });
 
 const ziConventionDetail = computed(() => {
@@ -893,9 +943,22 @@ const setGender = (v) => {
 };
 
 // 切换出生地 / 时刻口径 / 子时约定后都要重排（都会改变时柱，子时约定还可能改变日柱）
+// 一级：换省后原城市不再适用（城市名全表唯一，换省即换点），清掉等二级再选；
+//       「未指定 / 自定义经度」不是真的省，直接落到 cityValue 上。
+const setProvince = (v) => {
+  provinceValue.value = v;
+  if (v === '' || v === '__custom__') {
+    cityValue.value = v;
+  } else if (provinceOfCity(cityValue.value) !== v) {
+    cityValue.value = '';
+  }
+  if (resultInfo.value) queryGanZhi();
+};
+
+// 二级：选完城市才清筛选 —— 否则输「喀什」选中新疆后，二级又变回整省 24 项
 const setCity = (v) => {
   cityValue.value = v;
-  cityFilter.value = '';        // 选完清空筛选，免得选中项被筛掉后下拉显示空白
+  if (v) cityFilter.value = '';
   if (resultInfo.value) queryGanZhi();
 };
 
@@ -1170,10 +1233,17 @@ const applyShareParams = () => {
   if (s.city !== undefined) {
     // 城市键必须确实存在于经度表里，否则退回「未指定」，免得 longitude 变 null 却显示成选了城市
     cityValue.value = (s.city === '__custom__' || cityLongitude[s.city] !== undefined) ? s.city : '';
+    // 一级状态由二级反推，级联才会显示成「新疆 + 喀什地区」而不是空着
+    provinceValue.value = cityValue.value === '__custom__'
+      ? '__custom__'
+      : provinceOfCity(cityValue.value);
   }
   if (s.longitude !== undefined && (!cityValue.value || cityValue.value === '__custom__')) {
     customLongitude.value = String(s.longitude);
-    if (!cityValue.value) cityValue.value = '__custom__';
+    if (!cityValue.value) {
+      cityValue.value = '__custom__';
+      provinceValue.value = '__custom__';
+    }
   }
   if (s.trueSolar !== undefined) useTrueSolar.value = s.trueSolar;
   if (s.ziConvention) ziConvention.value = s.ziConvention;
@@ -1823,6 +1893,40 @@ onMounted(() => {
   padding-left: 20px;
   appearance: none;
   cursor: pointer;
+}
+
+.select-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* 出生地级联：省 + 市/区 并排；窄屏回落成上下两行。
+   minmax(0, 1fr) 是必需的 —— 默认 min-width:auto 会被长选项撑破栅格。 */
+.city-cascade {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 560px) {
+  .city-cascade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.birth-echo {
+  margin: 0 0 12px;
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  color: #566573;
+  background: #f8fafc;
+  border: 1px dashed #d5dde5;
+  border-radius: 8px;
+}
+
+.birth-echo strong {
+  color: #2c3e50;
 }
 
 .moment-steps {
