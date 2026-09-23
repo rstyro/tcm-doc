@@ -484,7 +484,7 @@ export const toTrueSolarTime = ({ y, m, d, h = 12, mi = 0, longitude }) => {
  */
 export const ZI_CONVENTIONS = [
   { value: 'nextDay', label: '23点换日', detail: '23:00 起算次日：日柱与时柱同时进次日（通行做法）' },
-  { value: 'lateZi', label: '夜子时归当日', detail: '日柱仍用当日，时干按当日日干起子时' }
+  { value: 'lateZi', label: '夜子归当日', detail: '夜子时算当日，日柱仍用当日，时干按当日日干起子时' }
 ];
 
 /** 按子时约定折算「排盘用时刻」（只对 23:00–23:59 有影响） */

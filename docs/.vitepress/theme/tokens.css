@@ -1,0 +1,367 @@
+/* ============================================================
+ * 设计令牌（八字族共用）
+ * 浅色档取组件原有色值 —— 换到变量上视觉不变；
+ * 暗色档在 html.dark 里统一覆写，组件只需引用 var(--bz-*)。
+ * 由 .workbuddy/tmp/{patch_all,design_tokens}+merge_tokens.py 生成；
+ * 改色请改脚本里的 TOKENS/派生规则再重跑，别手改本文件。
+ * ============================================================ */
+
+:root {
+  --bz-surface:            #ffffff;                 /* 卡片/输入框/空态底 */
+  --bz-surface-1:          #f8fafc;                 /* 次级块底 */
+  --bz-surface-2:          #f0f2f5;                 /* 槽位/分隔/标签底 */
+  --bz-btn-grey:           #dfe6e9;                 /* 灰按钮底 */
+  --bz-btn-grey-hover:     #b2bec3;                 /* 灰按钮悬停 */
+  --bz-border:             #e0e6ed;                 /* 常规描边 */
+  --bz-border-strong:      #b8c7d9;                 /* 强调描边 */
+  --bz-border-2:           #dcdde1;                 /* 预设按钮描边 */
+  --bz-border-3:           #d5dde5;                 /* 出生地回显虚线 */
+  --bz-border-dashed:      #bdc3c7;                 /* 空亡格虚线/未命中 */
+  --bz-card-border:        rgba(255, 255, 255, 0.2); /* 卡片高光描边 */
+  --bz-text-1:             #2c3e50;                 /* 主文本 */
+  --bz-badge-fg:           #2d3436;                 /* 薄荷徽记文字 */
+  --bz-text-2:             #5d6d7e;                 /* 次文本 */
+  --bz-text-2b:            #636e72;                 /* 次文本（藏干/时辰） */
+  --bz-text-2c:            #566573;                 /* 次文本（出生地回显） */
+  --bz-text-3:             #7f8c8d;                 /* 辅助文本 */
+  --bz-text-4:             #95a5a6;                 /* 弱文本 */
+  --bz-text-mute:          #b2bec3;                 /* 极弱文本 */
+  --bz-on-accent:          #ffffff;                 /* 彩底上的文字 */
+  --bz-accent:             #3498db;                 /* 主色（兼作底色，两模式一致） */
+  --bz-accent-dark:        #2980b9;                 /* 主色深档 */
+  --bz-accent-dark-2:      #2f89c5;                 /* 分享按钮悬停 */
+  --bz-accent-2:           #0984e3;                 /* 主色第二档 */
+  --bz-accent-light:       #74b9ff;                 /* 主色浅档 */
+  --bz-accent-shadow:      rgba(52, 152, 219, 0.3); /* 主色投影 */
+  --bz-focus-ring:         rgba(52, 152, 219, 0.1); /* 聚焦光圈 */
+  --bz-chip-dark:          #34495e;                 /* 深色小标签底 */
+  --bz-blue-bg:            #eaf4fd;                 /* 蓝色块底 */
+  --bz-blue-bg-soft:       #f4f9fe;                 /* 蓝色块底（更浅） */
+  --bz-blue-border:        #cfe3f7;                 /* 蓝色描边 */
+  --bz-blue-border-2:      #a9cce3;                 /* 蓝色虚线描边 */
+  --bz-blue-line:          #5b8ff9;                 /* 蓝色强调线 */
+  --bz-blue-text:          #2471a3;                 /* 蓝色文本 */
+  --bz-blue-text-mid:      #2e86c1;                 /* 蓝色文本（中） */
+  --bz-blue-text-strong:   #1d4ed8;                 /* 蓝色文本（强） */
+  --bz-blue-text-3:        #3a5f9e;                 /* 蓝色文本（时刻校核） */
+  --bz-blue-text-deep:     #1a5276;                 /* 蓝色文本（深） */
+  --bz-green:              #27ae60;                 /* 成功色 */
+  --bz-green-btn:          #00b894;                 /* 成功按钮 */
+  --bz-green-btn-hover:    #00a085;                 /* 成功按钮悬停 */
+  --bz-green-btn-dark:     #1e8449;                 /* 成功按钮（深） */
+  --bz-green-bg:           #f2fbf6;                 /* 绿色块底 */
+  --bz-green-border:       #bfe8d2;                 /* 绿色描边 */
+  --bz-green-text:         #1e8449;                 /* 绿色文本 */
+  --bz-danger-bg:          #fdecea;                 /* 危险块底 */
+  --bz-danger-border:      #f5b7b1;                 /* 危险描边 */
+  --bz-red-text:           #c0392b;                 /* 危险文本 */
+  --bz-warn-bg:            #fff8e6;                 /* 提示块底 */
+  --bz-warn-border:        #f5d99b;                 /* 提示描边 */
+  --bz-warn-text:          #7a5a1e;                 /* 提示文本 */
+  --bz-warn-text-2:        #8a6d3b;                 /* 提示文本（次） */
+  --bz-warn-text-strong:   #b8720b;                 /* 提示文本（强） */
+  --bz-warn-line:          #e0a800;                 /* 提示强调线 */
+  --bz-amber:              #ffeaa7;                 /* 琥珀底 */
+  --bz-amber-soft:         #f5d99b;                 /* 琥珀标签底 */
+  --bz-amber-2:            #fab1a0;                 /* 琥珀底（第二档） */
+  --bz-amber-strong:       #fdcb6e;                 /* 琥珀描边 */
+  --bz-zodiac-fg:          #d63031;                 /* 生肖徽记文字 */
+  --bz-orange-text:        #e17055;                 /* 橙色文本 */
+  --bz-purple:             #a29bfe;                 /* 紫色徽底 */
+  --bz-purple-text:        #6c5ce7;                 /* 紫色文本 */
+  --bz-mint:               #55efc4;                 /* 薄荷徽底 */
+  --bz-verdict-mid:        #d68910;                 /* 中档判词 */
+  --bz-shadow-soft:        rgba(0, 0, 0, 0.05);     /* 浅投影 */
+  --bz-shadow-1:           rgba(0, 0, 0, 0.06);     /* 浅投影（略强） */
+  --bz-shadow-strong:      rgba(0, 0, 0, 0.08);     /* 常规投影 */
+  --bz-shadow-2:           rgba(0, 0, 0, 0.1);      /* 重投影 */
+  --bz-el-wood:            #2e9e6b;                 /* 五行·木（文字） */
+  --bz-el-wood-1:          #55c98d;                 /* 五行·木（渐变起） */
+  --bz-el-wood-2:          #2e9e6b;                 /* 五行·木（渐变止） */
+  --bz-el-fire:            #d64545;                 /* 五行·火（文字） */
+  --bz-el-fire-1:          #f0736f;                 /* 五行·火（渐变起） */
+  --bz-el-fire-2:          #d64545;                 /* 五行·火（渐变止） */
+  --bz-el-earth:           #a97142;                 /* 五行·土（文字） */
+  --bz-el-earth-1:         #c9976a;                 /* 五行·土（渐变起） */
+  --bz-el-earth-2:         #a97142;                 /* 五行·土（渐变止） */
+  --bz-el-metal:           #7f8c9b;                 /* 五行·金（文字） */
+  --bz-el-metal-1:         #aab6c4;                 /* 五行·金（渐变起） */
+  --bz-el-metal-2:         #7f8c9b;                 /* 五行·金（渐变止） */
+  --bz-el-water:           #3b7dd8;                 /* 五行·水（文字） */
+  --bz-el-water-1:         #6fa8e8;                 /* 五行·水（渐变起） */
+  --bz-el-water-2:         #3b7dd8;                 /* 五行·水（渐变止） */
+  --bz-qi-ben-1:           rgba(255, 234, 167, 0.2); /* 本气得令底 */
+  --bz-qi-ben-2:           rgba(253, 203, 110, 0.2); /* 本气底 */
+  --bz-qi-ben-bd:          rgba(253, 203, 110, 0.3); /* 本气描边 */
+  --bz-qi-zhong-1:         rgba(162, 155, 254, 0.2); /* 中气底 */
+  --bz-qi-zhong-2:         rgba(108, 92, 231, 0.2); /* 中气底（深） */
+  --bz-qi-zhong-bd:        rgba(108, 92, 231, 0.3); /* 中气描边 */
+  --bz-qi-yu-1:            rgba(223, 230, 233, 0.2); /* 余气底 */
+  --bz-qi-yu-2:            rgba(178, 190, 195, 0.2); /* 余气底（深） */
+  --bz-qi-yu-bd:           rgba(178, 190, 195, 0.3); /* 余气描边 */
+  --bz-fs-1:               0.78rem;                 /* 字号 极小 */
+  --bz-fs-2:               0.85rem;                 /* 字号 小 */
+  --bz-fs-3:               0.92rem;                 /* 字号 正文 */
+  --bz-fs-4:               1.05rem;                 /* 字号 大 */
+  --bz-fs-5:               1.2rem;                  /* 字号 小标题 */
+  --bz-fs-6:               1.5rem;                  /* 字号 标题 */
+  --bz-lh-tight:           1.25;                    /* 行高 紧 */
+  --bz-lh-normal:          1.6;                     /* 行高 常规 */
+  --bz-lh-loose:           1.75;                    /* 行高 松 */
+  --bz-r-sm:               8px;                     /* 圆角 小 */
+  --bz-r-md:               12px;                    /* 圆角 中 */
+  --bz-r-lg:               20px;                    /* 圆角 大 */
+
+
+  /* —— bg 档：色块 / 徽记 / 渐变 —— */
+  --bz-amber-accent:        #ecd396;              /* amber·accent */
+  --bz-amber-fill:          #e67e22;              /* amber·fill */
+  --bz-amber-fill-2:        #d2b48c;              /* amber·fill-2 */
+  --bz-amber-fill-deep:     #8b4513;              /* amber·fill-deep */
+  --bz-amber-tint:          #faf0e6;              /* amber·tint */
+  --bz-amber-tint-2:        #f8edd2;              /* amber·tint-2 */
+  --bz-blue-accent:         #7a8ff9;              /* blue·accent */
+  --bz-blue-fill-2:         #5b8ff9;              /* blue·fill-2 */
+  --bz-blue-tint:           #eef1f4;              /* blue·tint */
+  --bz-blue-tint-2:         #c8d0dc;              /* blue·tint-2 */
+  --bz-gold-fill:           #ffd700;              /* gold·fill */
+  --bz-gold-fill-2:         #ffed4e;              /* gold·fill-2 */
+  --bz-green-fill:          #48b37e;              /* green·fill */
+  --bz-green-fill-2:        #7bc98f;              /* green·fill-2 */
+  --bz-green-fill-deep:     #2f8c5f;              /* green·fill-deep */
+  --bz-green-tint:          #eafaf1;              /* green·tint */
+  --bz-green-tint-2:        #d5f0e2;              /* green·tint-2 */
+  --bz-green-tint-3:        #bcd6c9;              /* green·tint-3 */
+  --bz-indigo-fill-2:       #5b6df9;              /* indigo·fill-2 */
+  --bz-red-fill:            #c0392b;              /* red·fill */
+  --bz-red-fill-2:          #e08484;              /* red·fill-2 */
+  --bz-red-fill-deep:       #8b0000;              /* red·fill-deep */
+  --bz-red-tint:            #fef7f7;              /* red·tint */
+  --bz-teal-fill:           #4a9d82;              /* teal·fill */
+  --bz-teal-fill-deep:      #2f6d5a;              /* teal·fill-deep */
+  --bz-teal-tint:           #f0faf8;              /* teal·tint */
+  --bz-teal-tint-3:         #9db8ad;              /* teal·tint-3 */
+  --bz-violet-fill:         #8e44ad;              /* violet·fill */
+  --bz-violet-tint:         #f5ecfa;              /* violet·tint */
+
+  /* —— fg 档：彩底上的文字 —— */
+  --bz-amber-fg-deep:       #5a3e2b;              /* amber·fg-deep */
+  --bz-amber-fg-mid:        #8a7440;              /* amber·fg-mid */
+  --bz-amber-fg-soft:       #c8b89a;              /* amber·fg-soft */
+  --bz-amber-fg-vivid-deep: #8b4513;              /* amber·fg-vivid-deep */
+  --bz-amber-fg-vivid-mid:  #a0522d;              /* amber·fg-vivid-mid */
+  --bz-blue-fg:             #8b96a5;              /* blue·fg */
+  --bz-blue-fg-deep:        #4a5a68;              /* blue·fg-deep */
+  --bz-blue-fg-mid:         #5a6675;              /* blue·fg-mid */
+  --bz-blue-fg-soft:        #96a0ad;              /* blue·fg-soft */
+  --bz-blue-fg-vivid-mid:   #3d6f9e;              /* blue·fg-vivid-mid */
+  --bz-blue-fg-vivid-soft:  #5b8ff9;              /* blue·fg-vivid-soft */
+  --bz-green-fg:            #8a9c92;              /* green·fg */
+  --bz-green-fg-mid:        #6f8d80;              /* green·fg-mid */
+  --bz-green-fg-vivid-deep: #2f8c5f;              /* green·fg-vivid-deep */
+  --bz-indigo-fg-vivid-soft: #5b6df9;              /* indigo·fg-vivid-soft */
+  --bz-red-fg-mid:          #a05a5a;              /* red·fg-mid */
+  --bz-red-fg-soft:         #b0a09c;              /* red·fg-soft */
+  --bz-red-fg-vivid:        #c05252;              /* red·fg-vivid */
+  --bz-red-fg-vivid-mid:    #a0432f;              /* red·fg-vivid-mid */
+  --bz-rose-fg-vivid-soft:  #e8688a;              /* rose·fg-vivid-soft */
+  --bz-teal-fg-deep:        #2f6d5a;              /* teal·fg-deep */
+  --bz-teal-fg-mid:         #55796c;              /* teal·fg-mid */
+  --bz-teal-fg-vivid-deep:  #0f766e;              /* teal·fg-vivid-deep */
+  --bz-violet-fg-deep:      #6c3483;              /* violet·fg-deep */
+  --bz-violet-fg-mid:       #6b5b7a;              /* violet·fg-mid */
+  --bz-violet-fg-vivid-mid: #7d3c98;              /* violet·fg-vivid-mid */
+
+  /* —— border 档：描边 / 分隔 —— */
+  --bz-amber-border:        #f6d8c8;              /* amber·border */
+  --bz-amber-border-2:      #f5deb3;              /* amber·border-2 */
+  --bz-amber-border-accent: #d2b48c;              /* amber·border-accent */
+  --bz-amber-border-accent-deep: #8b4513;              /* amber·border-accent-deep */
+  --bz-blue-border-alt:     #e8ecf1;              /* blue·border */
+  --bz-blue-border-2-alt:   #bcd8f0;              /* blue·border-2 */
+  --bz-blue-border-accent:  #7a8ff9;              /* blue·border-accent */
+  --bz-blue-border-accent-deep: #3498db;              /* blue·border-accent-deep */
+  --bz-green-border-alt:    #cdeadd;              /* green·border */
+  --bz-green-border-2:      #b8e6cc;              /* green·border-2 */
+  --bz-green-border-accent: #90ee90;              /* green·border-accent */
+  --bz-green-border-accent-deep: #48b37e;              /* green·border-accent-deep */
+  --bz-green-border-deep:   #6aab77;              /* green·border-deep */
+  --bz-red-border:          #f3cdc6;              /* red·border */
+  --bz-red-border-2:        #e8c6c6;              /* red·border-2 */
+  --bz-red-border-accent:   #e08484;              /* red·border-accent */
+  --bz-red-border-accent-deep: #c0392b;              /* red·border-accent-deep */
+  --bz-rose-border-accent:  #e8688a;              /* rose·border-accent */
+  --bz-teal-border:         #cfe8e3;              /* teal·border */
+  --bz-teal-border-2:       #b9e0d9;              /* teal·border-2 */
+  --bz-teal-border-accent-deep: #0f766e;              /* teal·border-accent-deep */
+  --bz-teal-border-deep:    #2f6d5a;              /* teal·border-deep */
+  --bz-violet-border:       #e3d2ee;              /* violet·border */
+  --bz-violet-border-2:     #d2b9e0;              /* violet·border-2 */
+  --bz-violet-border-accent-deep: #8e44ad;              /* violet·border-accent-deep */
+
+  /* —— shadow 档：投影 —— */
+  --bz-shadow-3:            rgba(0,0,0,0.15);     /* shadow·3 */
+  --bz-shadow-4:            rgba(0,0,0,0.3);      /* shadow·4 */
+}
+
+html.dark {
+  --bz-surface:            #202127;
+  --bz-surface-1:          #191a20;
+  --bz-surface-2:          #2a2b33;
+  --bz-btn-grey:           #2e3038;
+  --bz-btn-grey-hover:     #3b3e47;
+  --bz-border:             #33353c;
+  --bz-border-strong:      #4b5566;
+  --bz-border-2:           #33353c;
+  --bz-border-3:           #33353c;
+  --bz-border-dashed:      #4a4d57;
+  --bz-card-border:        rgba(255, 255, 255, 0.07);
+  --bz-text-1:             #e6e7ec;
+  --bz-badge-fg:           #0f2019;
+  --bz-text-2:             #a9b0bb;
+  --bz-text-2b:            #a0a7b2;
+  --bz-text-2c:            #a0a7b2;
+  --bz-text-3:             #949aa6;
+  --bz-text-4:             #7f8691;
+  --bz-text-mute:          #6d737d;
+  --bz-accent-2:           #3a9bff;
+  --bz-accent-light:       #4a86cc;
+  --bz-accent-shadow:      rgba(52, 152, 219, 0.35);
+  --bz-focus-ring:         rgba(52, 152, 219, 0.22);
+  --bz-chip-dark:          #3a4055;
+  --bz-blue-bg:            #1c2733;
+  --bz-blue-bg-soft:       #19222c;
+  --bz-blue-border:        #2c4a6b;
+  --bz-blue-border-2:      #3a5c7d;
+  --bz-blue-line:          #4a7bd6;
+  --bz-blue-text:          #7cb8e8;
+  --bz-blue-text-mid:      #7cb8e8;
+  --bz-blue-text-strong:   #8fb4ff;
+  --bz-blue-text-3:        #8fb8e0;
+  --bz-blue-text-deep:     #9ecdf0;
+  --bz-green:              #3fbf7f;
+  --bz-green-btn-dark:     #1f7a45;
+  --bz-green-bg:           #16281f;
+  --bz-green-border:       #255a42;
+  --bz-green-text:         #5fd08c;
+  --bz-danger-bg:          #2a1a1a;
+  --bz-danger-border:      #6e2f2b;
+  --bz-red-text:           #f0736f;
+  --bz-warn-bg:            #2b2313;
+  --bz-warn-border:        #6b5320;
+  --bz-warn-text:          #d8b26a;
+  --bz-warn-text-2:        #c8a76a;
+  --bz-warn-text-strong:   #e8b44a;
+  --bz-warn-line:          #c99a1e;
+  --bz-amber:              #d9b45c;
+  --bz-amber-soft:         #4a3d16;
+  --bz-amber-2:            #c08064;
+  --bz-amber-strong:       #8a6a25;
+  --bz-zodiac-fg:          #3a1010;
+  --bz-orange-text:        #f0866c;
+  --bz-purple:             #6f66c8;
+  --bz-purple-text:        #a99cf5;
+  --bz-mint:               #2f9a7c;
+  --bz-verdict-mid:        #e0a03a;
+  --bz-shadow-soft:        rgba(0, 0, 0, 0.35);
+  --bz-shadow-1:           rgba(0, 0, 0, 0.4);
+  --bz-shadow-strong:      rgba(0, 0, 0, 0.5);
+  --bz-shadow-2:           rgba(0, 0, 0, 0.55);
+  --bz-el-wood:            #4fc48c;
+  --bz-el-fire:            #f0736f;
+  --bz-el-earth:           #d0955f;
+  --bz-el-metal:           #a8b4c2;
+  --bz-el-water:           #6fa8e8;
+  --bz-qi-ben-1:           rgba(255, 234, 167, 0.1);
+  --bz-qi-ben-2:           rgba(253, 203, 110, 0.1);
+  --bz-qi-ben-bd:          rgba(253, 203, 110, 0.28);
+  --bz-qi-zhong-1:         rgba(162, 155, 254, 0.1);
+  --bz-qi-zhong-2:         rgba(108, 92, 231, 0.12);
+  --bz-qi-zhong-bd:        rgba(108, 92, 231, 0.32);
+  --bz-qi-yu-1:            rgba(223, 230, 233, 0.08);
+  --bz-qi-yu-2:            rgba(178, 190, 195, 0.1);
+  --bz-qi-yu-bd:           rgba(178, 190, 195, 0.28);
+
+  --bz-amber-accent:        #967d40;              
+  --bz-amber-fill:          #714a28;              
+  --bz-amber-fill-2:        #76572d;              
+  --bz-amber-fill-deep:     #603d24;              
+  --bz-amber-tint:          #26211d;              
+  --bz-amber-tint-2:        #2d281b;              
+  --bz-blue-accent:         #404e96;              
+  --bz-blue-fill-2:         #2d4576;              
+  --bz-blue-tint:           #1e2125;              
+  --bz-blue-tint-2:         #1f2328;              
+  --bz-gold-fill:           #716628;              
+  --bz-gold-fill-2:         #766f2d;              
+  --bz-green-fill:          #28714d;              
+  --bz-green-fill-2:        #2d7640;              
+  --bz-green-fill-deep:     #246043;              
+  --bz-green-tint:          #1e2521;              
+  --bz-green-tint-2:        #1d2a23;              
+  --bz-green-tint-3:        #1e2a24;              
+  --bz-indigo-fill-2:       #2d3576;              
+  --bz-red-fill:            #712f28;              
+  --bz-red-fill-2:          #762d2d;              
+  --bz-red-fill-deep:       #602424;              
+  --bz-red-tint:            #251e1e;              
+  --bz-teal-fill:           #287159;              
+  --bz-teal-fill-deep:      #24604e;              
+  --bz-teal-tint:           #1e2523;              
+  --bz-teal-tint-3:         #1d2a25;              
+  --bz-violet-fill:         #5c2871;              
+  --bz-violet-tint:         #221e25;              
+  --bz-amber-fg-deep:       #cd804c;              
+  --bz-amber-fg-mid:        #d1ae5c;              
+  --bz-amber-fg-soft:       #d2b784;              
+  --bz-amber-fg-vivid-deep: #cd824c;              
+  --bz-amber-fg-vivid-mid:  #d1825c;              
+  --bz-blue-fg:             #7daae8;              
+  --bz-blue-fg-deep:        #5ea2df;              
+  --bz-blue-fg-mid:         #6fa2e2;              
+  --bz-blue-fg-soft:        #99b8e1;              
+  --bz-blue-fg-vivid-mid:   #6faae2;              
+  --bz-blue-fg-vivid-soft:  #99b0e1;              
+  --bz-green-fg:            #61d193;              
+  --bz-green-fg-mid:        #54c997;              
+  --bz-green-fg-vivid-deep: #45c587;              
+  --bz-indigo-fg-vivid-soft: #9ca2d3;              
+  --bz-red-fg-mid:          #ea6161;              
+  --bz-red-fg-soft:         #e6a08f;              
+  --bz-red-fg-vivid:        #f07070;              
+  --bz-red-fg-vivid-mid:    #ea7961;              
+  --bz-rose-fg-vivid-soft:  #e199ac;              
+  --bz-teal-fg-deep:        #4cc7a1;              
+  --bz-teal-fg-mid:         #5ccca3;              
+  --bz-teal-fg-vivid-deep:  #4cc7bd;              
+  --bz-violet-fg-deep:      #b773d3;              
+  --bz-violet-fg-mid:       #af83d8;              
+  --bz-violet-fg-vivid-mid: #bf83d8;              
+  --bz-amber-border:        #643f2b;              
+  --bz-amber-border-2:      #6d562c;              
+  --bz-amber-border-accent: #6d512c;              
+  --bz-amber-border-accent-deep: #a3683e;              
+  --bz-blue-border-alt:     #2b4464;              
+  --bz-blue-border-2-alt:   #2c4f6d;              
+  --bz-blue-border-accent:  #2c376d;              
+  --bz-blue-border-accent-deep: #3e7aa3;              
+  --bz-green-border-alt:    #2b644a;              
+  --bz-green-border-2:      #2c6d48;              
+  --bz-green-border-accent: #2c6d2c;              
+  --bz-green-border-accent-deep: #3ea371;              
+  --bz-green-border-deep:   #2c6d39;              
+  --bz-red-border:          #64342b;              
+  --bz-red-border-2:        #6d2c2c;              
+  --bz-red-border-accent:   #6d2c2c;              
+  --bz-red-border-accent-deep: #a3473e;              
+  --bz-rose-border-accent:  #6d2c3d;              
+  --bz-teal-border:         #2b6459;              
+  --bz-teal-border-2:       #2c6d61;              
+  --bz-teal-border-accent-deep: #3ea39b;              
+  --bz-teal-border-deep:    #2c6d59;              
+  --bz-violet-border:       #4e2b64;              
+  --bz-violet-border-2:     #562c6d;              
+  --bz-violet-border-accent-deep: #853ea3;              
+  --bz-shadow-3:            rgba(0,0,0,0.62);     
+  --bz-shadow-4:            rgba(0,0,0,0.72);     
+}
