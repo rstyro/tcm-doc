@@ -833,8 +833,12 @@ function SolarTerm() {
      * Java逻辑：month<=3 ? (year-1) : year 传参获取节气列表 → 过滤 年=year & 月=month → 返回第一个
      */
     this.getTermByMonth = function (year, month) {
-        // 复刻Java核心判断：月份<=3 传入year-1，否则传入year
-        const termYear = month <= 3 ? (year - 1) : year;
+        // 【修复】原写法是 month <= 3 ? (year - 1) : year，会让 2 月、3 月永远取不到「节」：
+        //   getSolarTermDate(y) 返回的是「立春(y) → 大寒(y+1)」这一段，
+        //   传入 year-1 时列表只到 year 的 1 月为止，不可能含 2/3 月 → find 返回 null，
+        //   于是 getGanZhiOfMonth 少加一次偏移，整月月柱退成上一个月（每年约 55 天出错）。
+        //   实际需要 year-1 的只有 1 月（小寒落在目标年的 1 月，却住在 year-1 的列表里）。
+        const termYear = month === 1 ? (year - 1) : year;
         // 获取对应年份的【全年24节气完整列表】(返回Date数组，和Java的termDateList一致)
         const termDateList = this.getSolarTermDate(termYear);
         // 过滤：年份等于入参year + 月份等于入参month 的节气，取第一个 → 就是当月的【节】
@@ -846,13 +850,22 @@ function SolarTerm() {
     };
 
     // 获取月干支
-    this.getGanZhiOfMonth = function (year, month, day) {
+    // 【修复】原实现只比较「日」（day >= termDateTime.getDate()），
+    // 导致「节」当天零点就换月，与子平法「以节气交节时刻换月」不符（每月约 1 天偏差）。
+    // 现将出生时刻一并传入，与节的精确时刻比较。
+    // hour/minute 省略时按 12:00 处理，与本文件 parseDateStr 的默认时辰一致。
+    this.getGanZhiOfMonth = function (year, month, day, hour, minute) {
         let monthOffset = (year - this.BASE_YEAR) * 12 + month + 11;
-        // 获取当月的【节】 → 调用你新增的getTermByMonth方法
+        // 获取当月的【节】 → 调用getTermByMonth方法
         let termDateTime = this.getTermByMonth(year, month);
-        // 复刻Java逻辑：节存在 且 当日日期>=节的日期 → 月偏移量+1
-        if (termDateTime !== null && day >= termDateTime.getDate()) {
-            monthOffset++;
+        if (termDateTime !== null) {
+            const h = (hour === undefined || hour === null) ? 12 : hour;
+            const mi = (minute === undefined || minute === null) ? 0 : minute;
+            const birth = new Date(year, month - 1, day, h, mi, 0);
+            // 交节时刻之后才算进入本月
+            if (birth.getTime() >= termDateTime.getTime()) {
+                monthOffset++;
+            }
         }
         return this.cyclicalm(monthOffset);
     };
@@ -879,9 +892,16 @@ function SolarTerm() {
         return this.cyclicalm(lunarOffsetOfDay);
     };
 
-    // 时干支核心【公式】：时干=日干×2+时支 完整复刻 重中之重！
+    // 时干支核心【公式】：时干序 = 2×日干序 + 时支序
+    // 说明：原实现沿用 Java 的「偶数 hour/2-1、奇数 (hour+1)/2-1」得到的是以【丑】起的下标
+    // （0=丑 … 10=亥、11=子），再配 HOUR_ZHI 查地支。问题在于 0 点得 -1、23 点得 11，
+    // 这两个值指向同一个「子时」，天干公式却把它们当成两个不同的数 ——
+    // 于是同一日期里 00:30 得丙子、23:30 得戊子（戊子是「次日」的子时），
+    // 日柱却仍是当日，成了「日柱取当日、时柱取次日」的混合状态，两种流派都不满足。
+    // 现改为统一的时支序（子=0 … 亥=11），使 23:xx 与 00:xx 必然同柱。
+    // 附带：本函数只认「钟表时间」，真太阳时与子时换日由上层（baziUtils.resolveMoment）折算。
     this.getZhiOfHour = function (hour) {
-        // Java原公式：偶数=hour/2-1 奇数=(hour+1)/2-1
+        // Java原公式：偶数=hour/2-1 奇数=(hour+1)/2-1（保留以备外部调用，内部已不再使用）
         return hour % 2 === 0 ? hour / 2 - 1 : (hour + 1) / 2 - 1;
     };
 
@@ -889,11 +909,10 @@ function SolarTerm() {
     this.getGanZhiOfHour = function (dateStr) {
         let ld = this.parseDateStr(dateStr);
         let lunarOffsetOfDay = this.getLunarOffsetOfDay(ld.y, ld.m, ld.d);
-        let dayGan = (lunarOffsetOfDay % 10) + 1;
-        let zhiOfHour = this.getZhiOfHour(ld.h);
-        let genOfHour = dayGan * 2 + zhiOfHour;
-        let gan = this.GAN[(genOfHour - 1) % 10];
-        let zhi = this.HOUR_ZHI[(zhiOfHour === -1 ? 11 : zhiOfHour) % 12];
+        let dayGan = (lunarOffsetOfDay % 10) + 1;   // 日干序（1=甲 … 10=癸，此处按本历法的偏移）
+        let hourSeq = Math.floor(((ld.h + 1) % 24) / 2);   // 时支序：子=0 丑=1 … 亥=11
+        let gan = this.GAN[(dayGan * 2 + hourSeq - 2) % 10];
+        let zhi = this.ZHI[hourSeq];
         return gan + zhi;
     };
 
@@ -1026,7 +1045,7 @@ function SolarTerm() {
     this.getGanZhiByGregorian = function (dateStr) {
         let ld = this.parseDateStr(dateStr);
         let yearGanZhi = this.getYearGanZhi(ld.y, ld.m, ld.d, ld.h, ld.mi);
-        let monthGanZhi = this.getGanZhiOfMonth(ld.y, ld.m, ld.d);
+        let monthGanZhi = this.getGanZhiOfMonth(ld.y, ld.m, ld.d, ld.h, ld.mi);
         let dayGanZhi = this.getGanZhiOfDay(ld.y, ld.m, ld.d);
         let hourGanZhi = this.getGanZhiOfHour(dateStr);
 

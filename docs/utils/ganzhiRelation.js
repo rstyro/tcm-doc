@@ -265,6 +265,167 @@ export const getStemRelation = (a, b) => {
   return rels.length ? rels[0] : null;
 };
 
+// ===================== 关系矩阵（跨柱判定，各层共用） =====================
+
+/** 某五行对应的两个天干（用于判断「局中五行是否透干」） */
+export const stemsOfElement = (element) =>
+  HEAVENLY_STEMS.filter((g) => TG_TO_ELEMENT[g] === element);
+
+/**
+ * 多柱之间的关系矩阵 —— 「原局结构」与「大运 / 流年 / 流月」共用同一个内核。
+ *
+ * 输入是一组**带位置标签的柱**：
+ *   [{ pos: '年', stem: '甲', branch: '子' }, …]
+ * 输出把四类关系摊平：
+ *   branchPairs  地支两两：六合 / 六冲 / 六害 / 六破 / 相刑 / 自刑
+ *   stemPairs    天干两两：**只取**五合 / 相冲
+ *                （相生相克在天干之间几乎处处成立，一并列出会把重点淹没）
+ *   formations   成局：三字齐全的三合局 / 三会方
+ *   halves       未成局的二字组合：生旺半合 / 墓半合 / 拱合 / 半会 / 拱会
+ *
+ * 设计要点：**「流年 vs 原局」不需要另写一套判定** —— 把流年柱 append 进原局四柱、
+ * 再把 `focus` 指向流年柱的 pos，剩下的自然只有涉及它的条目。两处共用一个内核，
+ * 就是为了避免「原局一套判定、流年又一套」的分叉。
+ *
+ * @param {Array<{pos:string, stem?:string, branch?:string}>} pillars
+ * @param {Object}  [opts]
+ * @param {string?} [opts.focus=null]  只保留涉及该 pos 的条目
+ * @param {boolean} [opts.includeHalf=false]
+ *        两两关系里是否把「三合 / 三会之半」也算进去。默认 false ——
+ *        三合三会统一由 formations / halves 呈现，避免同一件事在界面上说两遍。
+ * @param {boolean} [opts.includeSameBranch=false] 是否保留「同为某支」这类中性项
+ *        （流年与原局同支传统称「伏吟」，有意味，届时显式打开）
+ */
+export const relationMatrix = (pillars, opts = {}) => {
+  const { focus = null, includeHalf = false, includeSameBranch = false } = opts;
+  const cols = (pillars || []).filter((p) => p && (p.stem || p.branch));
+  const posAt = (i) => cols[i].pos || ('#' + i);
+  const touched = (i, j) => !focus || posAt(i) === focus || posAt(j) === focus;
+  const pick = (branch) => cols.findIndex((c) => c.branch === branch);
+  // focus 柱自身带的地支。成局类判定要问的是「这个局与 focus 柱有无关联」，
+  // 只看 positions 会漏掉「原局已成局、focus 柱只是同气再来一个字」的情形
+  // （如原局申子辰，流年又是子）—— 那同样是流年与这个局发生了关系。
+  const focusBranch = focus ? (((cols.find((c) => c.pos === focus) || {}).branch) || '') : '';
+
+  // ---------- 地支两两 ----------
+  const branchPairs = [];
+  for (let i = 0; i < cols.length; i++) {
+    for (let j = i + 1; j < cols.length; j++) {
+      const a = cols[i].branch, b = cols[j].branch;
+      if (!a || !b || !touched(i, j)) continue;
+      const relations = getBranchRelations(a, b, { includeHalf })
+        .filter((r) => includeSameBranch || r.type !== '同支');
+      if (!relations.length) continue;
+      branchPairs.push({
+        key: a + b,
+        a: { pos: posAt(i), char: a },
+        b: { pos: posAt(j), char: b },
+        relations,
+        tone: relations.some((r) => r.tone === 'he') ? 'he'
+          : (relations.some((r) => r.tone === 'chong') ? 'chong' : 'neutral')
+      });
+    }
+  }
+
+  // ---------- 天干两两（只取五合 / 相冲）----------
+  const stemPairs = [];
+  for (let i = 0; i < cols.length; i++) {
+    for (let j = i + 1; j < cols.length; j++) {
+      const a = cols[i].stem, b = cols[j].stem;
+      if (!a || !b || !touched(i, j)) continue;
+      const relations = getStemRelations(a, b)
+        .filter((r) => r.type === '天干五合' || r.type === '天干相冲');
+      if (!relations.length) continue;
+      stemPairs.push({
+        key: a + b,
+        a: { pos: posAt(i), char: a },
+        b: { pos: posAt(j), char: b },
+        relations
+      });
+    }
+  }
+
+  // ---------- 成局（三字齐全）----------
+  // 成局是**整盘属性**：不因 focus 而消失，故一律算出、用 inFocus 标出是否牵涉 focus 柱。
+  const formations = [];
+  const scanForms = (groups, elementMap, type) => {
+    for (const g of groups) {
+      const members = [];
+      let complete = true;
+      for (const ch of g) {
+        const i = pick(ch);
+        if (i < 0) { complete = false; break; }
+        members.push({ char: ch, pos: posAt(i) });
+      }
+      if (!complete) continue;
+      const element = elementMap[g.join('')] || '';
+      const positions = members.map((m) => m.pos);
+      formations.push({
+        type,
+        group: g.join(''),
+        element,
+        members,
+        positions,
+        // 客观辅助信息：该局五行是否在天干上透出。至于「合而化不化」各派分歧很大，此处不判。
+        exposedStems: stemsOfElement(element).filter((s) => cols.some((c) => c.stem === s)),
+        inFocus: !focus || positions.includes(focus) || (!!focusBranch && g.includes(focusBranch))
+      });
+    }
+  };
+  scanForms(SAN_HE, FIVE_ELEMENT_NAME_OF_SANHE, '三合');
+  scanForms(SAN_HUI, FIVE_ELEMENT_NAME_OF_SANHUI, '三会');
+
+  // ---------- 未成局的二字组合：半合 / 拱合 / 半会 / 拱会 ----------
+  // 组内中位恒为 子午卯酉（三合的「旺支」＝ 三会的「仲支」），据此分「有中位 / 无中位」两档。
+  // 名称是传统叫法（生旺半合 · 墓半合 · 拱合），只表示**组合形态**，不代表力量定论。
+  const halves = [];
+  const scanHalves = (groups, elementMap, isSanHe) => {
+    const CENTER = 1;
+    for (const g of groups) {
+      if (formations.some((f) => f.group === g.join(''))) continue;   // 已成局就不再拆半
+      for (let x = 0; x < 3; x++) {
+        for (let y = x + 1; y < 3; y++) {
+          const ia = pick(g[x]), ib = pick(g[y]);
+          if (ia < 0 || ib < 0) continue;
+          const withCenter = (x === CENTER || y === CENTER);
+          let kind;
+          if (isSanHe) {
+            if (!withCenter) kind = '拱合';
+            else kind = (y === CENTER) ? '生旺半合' : '墓半合';
+          } else {
+            kind = withCenter ? '半会' : '拱会';
+          }
+          const positions = [posAt(ia), posAt(ib)];
+          halves.push({
+            key: g[x] + g[y],
+            group: g[x] + g[y],
+            of: g.join(''),
+            type: isSanHe ? '三合之半' : '三会之半',
+            kind,
+            element: elementMap[g.join('')] || '',
+            members: [{ char: g[x], pos: posAt(ia) }, { char: g[y], pos: posAt(ib) }],
+            positions,
+            inFocus: !focus || positions.includes(focus) || (!!focusBranch && g.includes(focusBranch))
+          });
+        }
+      }
+    }
+  };
+  scanHalves(SAN_HE, FIVE_ELEMENT_NAME_OF_SANHE, true);
+  scanHalves(SAN_HUI, FIVE_ELEMENT_NAME_OF_SANHUI, false);
+
+  const onlyFocus = (arr) => (focus ? arr.filter((x) => x.inFocus !== false) : arr);
+
+  return {
+    cols,
+    focus,
+    branchPairs,
+    stemPairs,
+    formations: onlyFocus(formations),
+    halves: onlyFocus(halves)
+  };
+};
+
 // ===================== 小工具 =====================
 
 /** 处理 JS 负数取模 */
@@ -323,6 +484,8 @@ export default {
   findGroup,
   getStemRelations,
   getStemRelation,
+  relationMatrix,
+  stemsOfElement,
   mod,
   getZodiacByBranch,
   getBranchByZodiac,
