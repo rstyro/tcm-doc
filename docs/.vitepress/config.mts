@@ -249,6 +249,40 @@ function getLingShuSidebar() {
 }
 
 
+// 《道德经》八十一章（章序, 章题）
+const DAODEJING_CHAPTERS: [number, string][] = [
+    [1, '天地之始'], [2, '美之为美'], [3, '圣人之治'], [4, '象帝之先'], [5, '天地不仁'], [6, '玄牝之门'],
+    [7, '天长地久'], [8, '不争无尤'], [9, '功遂身退'], [10, '长而不宰'], [11, '无之为用'], [12, '圣人为腹'],
+    [13, '宠辱两忘'], [14, '无状之状'], [15, '善为士者'], [16, '殁身不殆'], [17, '功成事遂'], [18, '道亡有义'],
+    [19, '绝圣弃智'], [20, '独异于人'], [21, '惟道是从'], [22, '圣人抱一'], [23, '道亦乐得'], [24, '自是不彰'],
+    [25, '道法自然'], [26, '静为躁君'], [27, '善行无痕'], [28, '知雄守雌'], [29, '圣人无为'], [30, '以道佐主'],
+    [31, '兵者不祥'], [32, '知止不殆'], [33, '知人者智'], [34, '不自为大'], [35, '执道乐往'], [36, '欲歙固张'],
+    [37, '道恒无为'], [38, '上德不德'], [39, '下为高基'], [40, '无中生有'], [41, '大器晚成'], [42, '物损而益'],
+    [43, '不言之教'], [44, '知足不辱'], [45, '大成若缺'], [46, '知足常足'], [47, '不行而知'], [48, '为道日损'],
+    [49, '善者吾善'], [50, '出生入死'], [51, '道生德畜'], [52, '天下有始'], [53, '盗竽非道'], [54, '善抱不脱'],
+    [55, '含德之厚'], [56, '知者不言'], [57, '以正治国'], [58, '福祸相倚'], [59, '治人尚啬'], [60, '以道治国'],
+    [61, '大者宜下'], [62, '万物之奥'], [63, '能成其大'], [64, '无为无败'], [65, '善为道者'], [66, '莫能与争'],
+    [67, '我有之宝'], [68, '不争之德'], [69, '哀者胜矣'], [70, '被褐怀玉'], [71, '知不知上'], [72, '自爱不贵'],
+    [73, '天网恢恢'], [74, '民不畏死'], [75, '无以生为'], [76, '强大处下'], [77, '不欲见贤'], [78, '柔之胜刚'],
+    [79, '道与善人'], [80, '小国寡民'], [81, '善者不辩'],
+]
+
+function ddjChapterItems(from: number, to: number) {
+    return DAODEJING_CHAPTERS
+        .filter(([n]) => n >= from && n <= to)
+        .map(([n, t]) => ({text: `第${n}章 ${t}`, link: `/shan/daodejing/zhang${n}`}))
+}
+
+const DAODEJING_GROUP = {
+    text: '道德经', collapsed: true,
+    items: [
+        {text: '导读', link: '/shan/daodejing/'},
+        {text: '道经 · 一至三十七章', collapsed: true, items: ddjChapterItems(1, 37)},
+        {text: '德经 · 三十八至八十一章', collapsed: true, items: ddjChapterItems(38, 81)},
+        {text: '八十一章合订', link: '/shan/daodejing/full'},
+    ]
+}
+
 const BENCAO_SECTIONS: string[][] = [
     ['yuanxu', '原序'],
     ['xuli', '序例'],
@@ -445,6 +479,7 @@ export default defineConfig({
                     {text: '食饵', link: '/shan/shier'},
                     {text: '筑基', link: '/shan/zhuji'},
                     {text: '玄典', link: '/shan/xuandian'},
+                    {text: '道德经', link: '/shan/daodejing/'},
                     {text: '拳法', link: '/shan/quanfa'},
                     {text: '符咒', link: '/shan/fuzhou'},
                 ]
@@ -520,7 +555,13 @@ export default defineConfig({
                         },
                         {text: '食饵', link: '/shan/shier'},
                         {text: '筑基', link: '/shan/zhuji'},
-                        {text: '玄典', link: '/shan/xuandian'},
+                        {
+                            text: '玄典', collapsed: false,
+                            items: [
+                                {text: '玄典概说', link: '/shan/xuandian'},
+                                DAODEJING_GROUP,
+                            ]
+                        },
                         {
                             text: '拳法', collapsed: false,
                             items: [
