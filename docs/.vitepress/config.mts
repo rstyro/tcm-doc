@@ -487,7 +487,7 @@ export default defineConfig({
     ],
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
-        logo: withBase('/logo.png'),
+        logo: '/logo.png',
         lastUpdated: {
             text: '最后更新于',
             formatOptions: {
@@ -513,6 +513,7 @@ export default defineConfig({
                 text: '医',
                 items: [
                     {text: '中医', link: '/tcm/introduce'},
+                    {text: '中医基础理论', link: '/tcm/jichu/'},
                     {text: '黄帝内经', link: '/tcm/huangdi/what'},
                     {text: '倪注·伤寒论', link: '/tcm/shanghanlun/start'},
                     {text: '金匮要略', link: '/tcm/jingui/what'},
@@ -624,10 +625,15 @@ export default defineConfig({
                     text: '相', collapsed: false,
                     items: [
                         {text: '介绍', link: '/face/start'},
+                        {text: '相术源流与流派', link: '/face/history'},
+                        {text: '相术原典导读', link: '/face/classics'},
                         {text: '人相·面相', link: '/face/mianxiang'},
                         {text: '人相·手相', link: '/face/shouxiang'},
+                        {text: '印相', link: '/face/yinxiang'},
                         {text: '名相', link: '/face/mingxiang'},
                         {text: '家相·墓相（风水）', link: '/face/fengshui'},
+                        {text: '风水·八宅与玄空', link: '/face/fengshui-bazhai'},
+                        {text: '风水·罗盘与形法', link: '/face/fengshui-luopan'},
                     ]
                 }
             ],
@@ -637,6 +643,23 @@ export default defineConfig({
                     items: [
                         {text: '介绍', link: '/tcm/introduce'},
                         {text: '古代中药重量单位换算', link: '/tcm/unit'},
+                    ]
+                },
+                {
+                    text: '中医基础理论', collapsed: true,
+                    items: [
+                        {text: '导览', link: '/tcm/jichu/'},
+                        {text: '阴阳学说', link: '/tcm/jichu/yinyang'},
+                        {text: '五行学说', link: '/tcm/jichu/wuxing'},
+                        {text: '精气血津液神', link: '/tcm/jichu/qixue'},
+                        {text: '藏象学说', link: '/tcm/jichu/zangxiang'},
+                        {text: '经络与腧穴', link: '/tcm/jichu/jingluo'},
+                        {text: '病因与病机', link: '/tcm/jichu/bingyin'},
+                        {text: '四诊', link: '/tcm/jichu/sizhen'},
+                        {text: '辨证方法', link: '/tcm/jichu/bianzheng'},
+                        {text: '治则与治法', link: '/tcm/jichu/zhize'},
+                        {text: '体质学说', link: '/tcm/jichu/tizhi'},
+                        {text: '五运六气', link: '/tcm/jichu/yunqi'},
                     ]
                 },
                 {
@@ -713,7 +736,19 @@ export default defineConfig({
                             ]
                         },
                         {text: '太岁', link: '/fate/taisui'},
-                        {text: '紫微斗数', link: '/fate/ziwei'},
+                        {
+                            text: '紫微斗数', collapsed: true,
+                            items: [
+                                {text: '导览', link: '/fate/ziwei'},
+                                {text: '源流与文献', link: '/fate/ziwei/origin'},
+                                {text: '十二宫与身宫', link: '/fate/ziwei/palaces'},
+                                {text: '十四主星', link: '/fate/ziwei/stars-main'},
+                                {text: '辅佐煞杂曜', link: '/fate/ziwei/stars-minor'},
+                                {text: '四化', link: '/fate/ziwei/sihua'},
+                                {text: '排盘方法', link: '/fate/ziwei/paipan'},
+                                {text: '格局与看盘', link: '/fate/ziwei/geju'},
+                            ]
+                        },
                         {
                             text: '查询工具', items: [
                                 {text: '八字查询工具', link: '/fate/query/baziQuery'},
