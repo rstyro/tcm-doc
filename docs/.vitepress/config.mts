@@ -283,6 +283,32 @@ const DAODEJING_GROUP = {
     ]
 }
 
+// 《庄子》三十三篇（篇序, 篇名）
+const ZHUANGZI_CHAPTERS: [number, string][] = [
+    [1, '逍遥游'], [2, '齐物论'], [3, '养生主'], [4, '人间世'], [5, '德充符'], [6, '大宗师'],
+    [7, '应帝王'], [8, '骈拇'], [9, '马蹄'], [10, '胠箧'], [11, '在宥'], [12, '天地'],
+    [13, '天道'], [14, '天运'], [15, '刻意'], [16, '缮性'], [17, '秋水'], [18, '至乐'],
+    [19, '达生'], [20, '山木'], [21, '田子方'], [22, '知北游'], [23, '庚桑楚'], [24, '徐无鬼'],
+    [25, '则阳'], [26, '外物'], [27, '寓言'], [28, '让王'], [29, '盗跖'], [30, '说剑'],
+    [31, '渔父'], [32, '列御寇'], [33, '天下'],
+]
+
+function zzChapterItems(from: number, to: number) {
+    return ZHUANGZI_CHAPTERS
+        .filter(([n]) => n >= from && n <= to)
+        .map(([n, t]) => ({text: `第${n}篇 ${t}`, link: `/shan/zhuangzi/pian${n}`}))
+}
+
+const ZHUANGZI_GROUP = {
+    text: '庄子', collapsed: true,
+    items: [
+        {text: '导读', link: '/shan/zhuangzi/'},
+        {text: '内篇 · 一至七', collapsed: true, items: zzChapterItems(1, 7)},
+        {text: '外篇 · 八至二十二', collapsed: true, items: zzChapterItems(8, 22)},
+        {text: '杂篇 · 二十三至三十三', collapsed: true, items: zzChapterItems(23, 33)},
+    ]
+}
+
 const BENCAO_SECTIONS: string[][] = [
     ['yuanxu', '原序'],
     ['xuli', '序例'],
@@ -477,9 +503,8 @@ export default defineConfig({
                     {text: '介绍', link: '/shan/start'},
                     {text: '功法导览', link: '/shan/gongfa'},
                     {text: '食饵', link: '/shan/shier'},
-                    {text: '筑基', link: '/shan/zhuji'},
+                    {text: '筑基', link: '/shan/zhuji/'},
                     {text: '玄典', link: '/shan/xuandian'},
-                    {text: '道德经', link: '/shan/daodejing/'},
                     {text: '拳法', link: '/shan/quanfa'},
                     {text: '符咒', link: '/shan/fuzhou'},
                 ]
@@ -554,12 +579,30 @@ export default defineConfig({
                             ]
                         },
                         {text: '食饵', link: '/shan/shier'},
-                        {text: '筑基', link: '/shan/zhuji'},
+                        {
+                            text: '筑基', collapsed: false,
+                            items: [
+                                {text: '筑基概说', link: '/shan/zhuji/'},
+                                {text: '术语辨析', link: '/shan/zhuji/terms'},
+                                {text: '静坐答疑', link: '/shan/zhuji/faq'},
+                                {text: '静定传统对照', link: '/shan/zhuji/compare'},
+                                {
+                                    text: '静定原典', collapsed: true,
+                                    items: [
+                                        {text: '原典导读', link: '/shan/zhuji/classics/'},
+                                        {text: '清静经', link: '/shan/zhuji/classics/qingjingjing'},
+                                        {text: '天隐子', link: '/shan/zhuji/classics/tianyinzi'},
+                                        {text: '坐忘论', link: '/shan/zhuji/classics/zuowanglun'},
+                                    ]
+                                },
+                            ]
+                        },
                         {
                             text: '玄典', collapsed: false,
                             items: [
                                 {text: '玄典概说', link: '/shan/xuandian'},
                                 DAODEJING_GROUP,
+                                ZHUANGZI_GROUP,
                             ]
                         },
                         {
@@ -567,6 +610,9 @@ export default defineConfig({
                             items: [
                                 {text: '拳法导览', link: '/shan/quanfa'},
                                 {text: '导引·八段锦', link: '/shan/baduanjin'},
+                                {text: '导引·易筋经', link: '/shan/yijinjing'},
+                                {text: '导引·五禽戏', link: '/shan/wuqinxi'},
+                                {text: '吐纳·六字诀', link: '/shan/liuzijue'},
                             ]
                         },
                         {text: '符咒', link: '/shan/fuzhou'},
