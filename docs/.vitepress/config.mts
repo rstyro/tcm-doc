@@ -543,6 +543,8 @@ export default defineConfig({
                     {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
                     {text: '八字', link: '/fate/bazi'},
                     {text: '日主旺衰', link: '/fate/wangshuai'},
+                    {text: '命盘实例', link: '/fate/shili'},
+                    {text: '合婚', link: '/fate/hehun'},
                     {text: '紫微斗数', link: '/fate/ziwei'},
                 ]
             },
@@ -791,6 +793,15 @@ export default defineConfig({
                         {text: '格局', link: '/fate/geju'},
                         {text: '用神', link: '/fate/yongshen'},
                         {text: '八字怎么批', link: '/fate/piming'},
+                    ]
+                },
+                {text: '合婚', link: '/fate/hehun'},
+                {
+                    text: '命盘实例', collapsed: false,
+                    items: [
+                        {text: '导览', link: '/fate/shili'},
+                        {text: '实例一：辛金生申月（偏强）', link: '/fate/shili/example1'},
+                        {text: '实例二：辛金生卯月（偏弱）', link: '/fate/shili/example2'},
                     ]
                 },
                 {text: '太岁', link: '/fate/taisui'},

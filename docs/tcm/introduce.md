@@ -51,7 +51,9 @@
 
 ### 治疗手段
 - 中药
-    - 按治疗作用分为：补虚药、解表药、清热药、温里药、理气药、消食药、收涩药、祛风湿药、芳香化湿药、利水渗湿药、化痰止咳平喘药、安神药、平肝息风药、活血祛淤药、止血药、泻下药、驱虫药、芳香开窍药。
+    - 按治疗作用分为：[补虚药](/tcm/zhongyaoxue/buxu)、[解表药](/tcm/zhongyaoxue/jiebiao)、[清热药](/tcm/zhongyaoxue/qingre)、[温里药](/tcm/zhongyaoxue/wenli)、[理气药](/tcm/zhongyaoxue/liqi)、[消食药](/tcm/zhongyaoxue/xiaoshi)、[收涩药](/tcm/zhongyaoxue/shouse)、[祛风湿药](/tcm/zhongyaoxue/qufengshi)、[芳香化湿药](/tcm/zhongyaoxue/huashi)、[利水渗湿药](/tcm/zhongyaoxue/lishuishenshi)、[化痰止咳平喘药](/tcm/zhongyaoxue/huatanzhikepingchuan)、[安神药](/tcm/zhongyaoxue/anshen)、[平肝息风药](/tcm/zhongyaoxue/pingganxifeng)、[活血祛淤药](/tcm/zhongyaoxue/huoxuehuayu)、[止血药](/tcm/zhongyaoxue/zhixue)、[泻下药](/tcm/zhongyaoxue/xiexia)、[驱虫药](/tcm/zhongyaoxue/quchong)、[芳香开窍药](/tcm/zhongyaoxue/kaiqiao)。
+- 食疗与食养
+    - 传统有「药食同源」之说：饮食调养与药物调理共用性味归经的同一框架，食物可入药、药材亦可入食。日常食养另属山部《[食饵](/shan/shier)》所述，补益类材料的性味功效见《[补虚药](/tcm/zhongyaoxue/buxu)》。
 - 针灸
     - 针灸按人体十四体表经脉循行常用穴位针灸，根据病情的不同和穴位的不同而选取不同的进针手法和深度及角度。十四经脉为：任脉、督脉、手太阴肺经、手少阴心经、手厥阴心包经、手阳明大肠经、手太阳小肠经、手少阳三焦经、足阳明胃经、足太阳膀胱经、足少阳胆经、足太阴脾经、足少阴肾经、足厥阴肝经。
 - 拔火罐
