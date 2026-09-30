@@ -93,17 +93,15 @@ const GUA_64 = [{"name": "乾", "num": " 1", "symbol": "䷀"}, {"name": "坤", "
     "symbol": "䷾"
 }, {"name": "未济", "num": "64", "symbol": "䷿"}]
 
-function getZhouYiSidebar() {
-    let items: {}[] = [{
-        text: '《周易》是什么？',
-        link: '/divination/zhouyi/what.md'
-    }, {
-        text: '六十四卦合订（全览）',
-        link: '/divination/zhouyi/zhouyi.md'
-    }]
-    for (let i = 0; i < GUA_64.length; i++) {
+// 六十四卦侧栏项：卦号 from..to（皆含，1 起）。上经 1–30、下经 31–64。
+function guaItems(from: number, to: number) {
+    let items: {}[] = []
+    for (let i = from - 1; i < to; i++) {
         let gua = GUA_64[i];
-        items.push({text: `第${gua.num}卦 ${gua.symbol} ${gua.name}`, link: `/divination/zhouyi/zhouyi_${i + 1}`})
+        items.push({
+            text: `第${String(gua.num).trim()}卦 ${gua.symbol} ${gua.name}`,
+            link: `/divination/zhouyi/zhouyi_${i + 1}`
+        })
     }
     return items
 }
@@ -512,15 +510,29 @@ export default defineConfig({
             {
                 text: '医',
                 items: [
-                    {text: '中医', link: '/tcm/introduce'},
-                    {text: '中医基础理论', link: '/tcm/jichu/'},
-                    {text: '黄帝内经', link: '/tcm/huangdi/what'},
-                    {text: '倪注·伤寒论', link: '/tcm/shanghanlun/start'},
-                    {text: '金匮要略', link: '/tcm/jingui/what'},
-                    {text: '本草纲目', link: '/tcm/bencao/yuanxu'},
-                    {text: '中药学', link: '/tcm/zhongyaoxue/jiebiao'},
-                    {text: '方剂学', link: '/tcm/fangjixue/zonglun-xulun'},
-
+                    {
+                        text: '总论与基础',
+                        items: [
+                            {text: '中医介绍', link: '/tcm/introduce'},
+                            {text: '中医基础理论', link: '/tcm/jichu/'},
+                        ]
+                    },
+                    {
+                        text: '经典',
+                        items: [
+                            {text: '黄帝内经', link: '/tcm/huangdi/what'},
+                            {text: '倪注·伤寒论', link: '/tcm/shanghanlun/start'},
+                            {text: '金匮要略', link: '/tcm/jingui/what'},
+                            {text: '本草纲目', link: '/tcm/bencao/yuanxu'},
+                        ]
+                    },
+                    {
+                        text: '学科',
+                        items: [
+                            {text: '中药学', link: '/tcm/zhongyaoxue/jiebiao'},
+                            {text: '方剂学', link: '/tcm/fangjixue/zonglun-xulun'},
+                        ]
+                    },
                 ]
             },
             {
@@ -537,25 +549,64 @@ export default defineConfig({
             {
                 text: '相',
                 items: [
-                    {text: '介绍', link: '/face/start'},
-                    {text: '人相·面相', link: '/face/mianxiang'},
-                    {text: '人相·手相', link: '/face/shouxiang'},
-                    {text: '名相', link: '/face/mingxiang'},
-                    {text: '家相·墓相（风水）', link: '/face/fengshui'},
+                    {
+                        text: '相术总论',
+                        items: [
+                            {text: '五术之相', link: '/face/start'},
+                            {text: '相术源流与流派', link: '/face/history'},
+                            {text: '相术原典导读', link: '/face/classics'},
+                        ]
+                    },
+                    {
+                        text: '人相',
+                        items: [
+                            {text: '面相', link: '/face/mianxiang'},
+                            {text: '手相', link: '/face/shouxiang'},
+                        ]
+                    },
+                    {
+                        text: '印相与名相',
+                        items: [
+                            {text: '印相', link: '/face/yinxiang'},
+                            {text: '名相', link: '/face/mingxiang'},
+                        ]
+                    },
+                    {
+                        text: '家相·墓相（风水）',
+                        items: [
+                            {text: '风水概说', link: '/face/fengshui'},
+                            {text: '八宅与玄空', link: '/face/fengshui-bazhai'},
+                            {text: '罗盘与形法', link: '/face/fengshui-luopan'},
+                        ]
+                    },
                 ]
             },
             {
                 text: '卜',
                 items: [
-                    {text: '五术之卜', link: '/divination/start'},
-                    {text: '周易', link: '/divination/zhouyi/what'},
-                    {text: '八卦基础', link: '/divination/zhouyi/bagua'},
-                    {text: '六十四卦合订', link: '/divination/zhouyi/zhouyi'},
+                    {
+                        text: '卜学总论',
+                        items: [
+                            {text: '五术之卜', link: '/divination/start'},
+                            {text: '八卦基础', link: '/divination/zhouyi/bagua'},
+                        ]
+                    },
+                    {
+                        text: '周易',
+                        items: [
+                            {text: '《周易》是什么？', link: '/divination/zhouyi/what'},
+                            {text: '六十四卦合订', link: '/divination/zhouyi/zhouyi'},
+                        ]
+                    },
                     {text: '十翼', link: '/divination/shiyi/what'},
-                    {text: '六爻', link: '/divination/liuyao'},
-                    {text: '梅花易数', link: '/divination/meihua'},
+                    {
+                        text: '易占流派',
+                        items: [
+                            {text: '六爻', link: '/divination/liuyao'},
+                            {text: '梅花易数', link: '/divination/meihua'},
+                        ]
+                    },
                 ]
-
             },
             {
                 text: '查询工具', items: [
@@ -570,79 +621,89 @@ export default defineConfig({
         sidebar: {
             '/shan/': [
                 {
-                    text: '山', collapsed: false,
+                    text: '山术入门', collapsed: false,
                     items: [
-                        {
-                            text: '山术入门', collapsed: false,
-                            items: [
-                                {text: '介绍', link: '/shan/start'},
-                                {text: '功法导览', link: '/shan/gongfa'},
-                            ]
-                        },
-                        {text: '食饵', link: '/shan/shier'},
-                        {
-                            text: '筑基', collapsed: false,
-                            items: [
-                                {text: '筑基概说', link: '/shan/zhuji/'},
-                                {text: '术语辨析', link: '/shan/zhuji/terms'},
-                                {text: '静坐答疑', link: '/shan/zhuji/faq'},
-                                {text: '静定传统对照', link: '/shan/zhuji/compare'},
-                                {
-                                    text: '静定原典', collapsed: true,
-                                    items: [
-                                        {text: '原典导读', link: '/shan/zhuji/classics/'},
-                                        {text: '清静经', link: '/shan/zhuji/classics/qingjingjing'},
-                                        {text: '天隐子', link: '/shan/zhuji/classics/tianyinzi'},
-                                        {text: '坐忘论', link: '/shan/zhuji/classics/zuowanglun'},
-                                    ]
-                                },
-                            ]
-                        },
-                        {
-                            text: '玄典', collapsed: false,
-                            items: [
-                                {text: '玄典概说', link: '/shan/xuandian'},
-                                DAODEJING_GROUP,
-                                ZHUANGZI_GROUP,
-                            ]
-                        },
-                        {
-                            text: '拳法', collapsed: false,
-                            items: [
-                                {text: '拳法导览', link: '/shan/quanfa'},
-                                {text: '导引·八段锦', link: '/shan/baduanjin'},
-                                {text: '导引·易筋经', link: '/shan/yijinjing'},
-                                {text: '导引·五禽戏', link: '/shan/wuqinxi'},
-                                {text: '吐纳·六字诀', link: '/shan/liuzijue'},
-                            ]
-                        },
-                        {text: '符咒', link: '/shan/fuzhou'},
+                        {text: '介绍', link: '/shan/start'},
+                        {text: '功法导览', link: '/shan/gongfa'},
                     ]
-                }
+                },
+                {text: '食饵', link: '/shan/shier'},
+                {
+                    text: '筑基', collapsed: false,
+                    items: [
+                        {text: '筑基概说', link: '/shan/zhuji/'},
+                        {text: '术语辨析', link: '/shan/zhuji/terms'},
+                        {text: '静坐答疑', link: '/shan/zhuji/faq'},
+                        {text: '静定传统对照', link: '/shan/zhuji/compare'},
+                        {
+                            text: '静定原典', collapsed: true,
+                            items: [
+                                {text: '原典导读', link: '/shan/zhuji/classics/'},
+                                {text: '清静经', link: '/shan/zhuji/classics/qingjingjing'},
+                                {text: '天隐子', link: '/shan/zhuji/classics/tianyinzi'},
+                                {text: '坐忘论', link: '/shan/zhuji/classics/zuowanglun'},
+                            ]
+                        },
+                    ]
+                },
+                {
+                    text: '玄典', collapsed: false,
+                    items: [
+                        {text: '玄典概说', link: '/shan/xuandian'},
+                        DAODEJING_GROUP,
+                        ZHUANGZI_GROUP,
+                    ]
+                },
+                {
+                    text: '拳法', collapsed: false,
+                    items: [
+                        {text: '拳法导览', link: '/shan/quanfa'},
+                        {text: '导引·八段锦', link: '/shan/baduanjin'},
+                        {text: '导引·易筋经', link: '/shan/yijinjing'},
+                        {text: '导引·五禽戏', link: '/shan/wuqinxi'},
+                        {text: '吐纳·六字诀', link: '/shan/liuzijue'},
+                    ]
+                },
+                {text: '符咒', link: '/shan/fuzhou'},
             ],
             '/face/': [
                 {
-                    text: '相', collapsed: false,
+                    text: '相术总论', collapsed: false,
                     items: [
-                        {text: '介绍', link: '/face/start'},
+                        {text: '五术之相', link: '/face/start'},
                         {text: '相术源流与流派', link: '/face/history'},
                         {text: '相术原典导读', link: '/face/classics'},
-                        {text: '人相·面相', link: '/face/mianxiang'},
-                        {text: '人相·手相', link: '/face/shouxiang'},
+                    ]
+                },
+                {
+                    text: '人相', collapsed: false,
+                    items: [
+                        {text: '面相', link: '/face/mianxiang'},
+                        {text: '手相', link: '/face/shouxiang'},
+                    ]
+                },
+                {
+                    text: '印相与名相', collapsed: false,
+                    items: [
                         {text: '印相', link: '/face/yinxiang'},
                         {text: '名相', link: '/face/mingxiang'},
-                        {text: '家相·墓相（风水）', link: '/face/fengshui'},
-                        {text: '风水·八宅与玄空', link: '/face/fengshui-bazhai'},
-                        {text: '风水·罗盘与形法', link: '/face/fengshui-luopan'},
                     ]
-                }
+                },
+                {
+                    text: '家相·墓相（风水）', collapsed: false,
+                    items: [
+                        {text: '风水概说', link: '/face/fengshui'},
+                        {text: '八宅与玄空', link: '/face/fengshui-bazhai'},
+                        {text: '罗盘与形法', link: '/face/fengshui-luopan'},
+                    ]
+                },
             ],
             '/tcm/': [
                 {
-                    text: '中医', collapsed: true,
+                    text: '中医总论', collapsed: false,
                     items: [
-                        {text: '介绍', link: '/tcm/introduce'},
-                        {text: '古代中药重量单位换算', link: '/tcm/unit'},
+                        {text: '中医介绍', link: '/tcm/introduce'},
+                        {text: '历代中药重量单位', link: '/tcm/unit'},
                     ]
                 },
                 {
@@ -708,65 +769,69 @@ export default defineConfig({
                 }
             ],
             '/fate/': [
+                {text: '命理师', link: '/fate/what'},
                 {
-                    text: '命', collapsed: false,
+                    text: '基础概念', collapsed: false,
                     items: [
-                        {text: '命理师', link: '/fate/what'},
-                        {
-                            text: '基础概念', collapsed: false,
-                            items: [
-                                {text: '天干地支', link: '/fate/ganzhi'},
-                                {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
-                                {text: '纳音', link: '/fate/nayin'},
-                                {text: '神煞', link: '/fate/shensha'},
-                            ]
-                        },
-                        {text: '五行', link: '/fate/wuxing'},
-                        {
-                            text: '八字', collapsed: false,
-                            items: [
-                                {text: '八字基础', link: '/fate/bazi'},
-                                {text: '八字怎么批', link: '/fate/piming'},
-                                {text: '日主旺衰', link: '/fate/wangshuai'},
-                                {text: '十神', link: '/fate/shishen'},
-                                {text: '十二长生', link: '/fate/changsheng'},
-                                {text: '大运与流年', link: '/fate/dayun'},
-                                {text: '格局', link: '/fate/geju'},
-                                {text: '用神', link: '/fate/yongshen'},
-                            ]
-                        },
-                        {text: '太岁', link: '/fate/taisui'},
-                        {
-                            text: '紫微斗数', collapsed: true,
-                            items: [
-                                {text: '导览', link: '/fate/ziwei'},
-                                {text: '源流与文献', link: '/fate/ziwei/origin'},
-                                {text: '十二宫与身宫', link: '/fate/ziwei/palaces'},
-                                {text: '十四主星', link: '/fate/ziwei/stars-main'},
-                                {text: '辅佐煞杂曜', link: '/fate/ziwei/stars-minor'},
-                                {text: '四化', link: '/fate/ziwei/sihua'},
-                                {text: '排盘方法', link: '/fate/ziwei/paipan'},
-                                {text: '格局与看盘', link: '/fate/ziwei/geju'},
-                            ]
-                        },
-                        {
-                            text: '查询工具', items: [
-                                {text: '八字查询工具', link: '/fate/query/baziQuery'},
-                                {text: '节气查询工具', link: '/fate/query/jieqiQuery'},
-                                {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
-                                {text: '八字合婚查询', link: '/fate/query/hehunQuery'},
-                            ]
-                        },
+                        {text: '天干地支', link: '/fate/ganzhi'},
+                        {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
+                        {text: '纳音', link: '/fate/nayin'},
+                        {text: '神煞', link: '/fate/shensha'},
                     ]
-                }
+                },
+                {text: '五行', link: '/fate/wuxing'},
+                {
+                    text: '八字', collapsed: false,
+                    items: [
+                        {text: '八字基础', link: '/fate/bazi'},
+                        {text: '十神', link: '/fate/shishen'},
+                        {text: '十二长生', link: '/fate/changsheng'},
+                        {text: '大运与流年', link: '/fate/dayun'},
+                        {text: '日主旺衰', link: '/fate/wangshuai'},
+                        {text: '格局', link: '/fate/geju'},
+                        {text: '用神', link: '/fate/yongshen'},
+                        {text: '八字怎么批', link: '/fate/piming'},
+                    ]
+                },
+                {text: '太岁', link: '/fate/taisui'},
+                {
+                    text: '紫微斗数', collapsed: true,
+                    items: [
+                        {text: '导览', link: '/fate/ziwei'},
+                        {text: '源流与文献', link: '/fate/ziwei/origin'},
+                        {text: '十二宫与身宫', link: '/fate/ziwei/palaces'},
+                        {text: '十四主星', link: '/fate/ziwei/stars-main'},
+                        {text: '辅佐煞杂曜', link: '/fate/ziwei/stars-minor'},
+                        {text: '四化', link: '/fate/ziwei/sihua'},
+                        {text: '排盘方法', link: '/fate/ziwei/paipan'},
+                        {text: '格局与看盘', link: '/fate/ziwei/geju'},
+                    ]
+                },
+                {
+                    text: '查询工具', items: [
+                        {text: '八字查询工具', link: '/fate/query/baziQuery'},
+                        {text: '节气查询工具', link: '/fate/query/jieqiQuery'},
+                        {text: '太岁查询工具', link: '/fate/query/taisuiQuery'},
+                        {text: '八字合婚查询', link: '/fate/query/hehunQuery'},
+                    ]
+                },
             ],
             '/divination/': [
-                {text: '五术之卜', link: '/divination/start'},
-                {text: '八卦基础', link: '/divination/zhouyi/bagua.md'},
                 {
-                    text: '周易',
-                    collapsed: false,
-                    items: getZhouYiSidebar()
+                    text: '卜学总论', collapsed: false,
+                    items: [
+                        {text: '五术之卜', link: '/divination/start'},
+                        {text: '八卦基础', link: '/divination/zhouyi/bagua'},
+                    ]
+                },
+                {
+                    text: '周易', collapsed: false,
+                    items: [
+                        {text: '《周易》是什么？', link: '/divination/zhouyi/what'},
+                        {text: '六十四卦合订（全览）', link: '/divination/zhouyi/zhouyi'},
+                        {text: '上经（第 1–30 卦）', collapsed: true, items: guaItems(1, 30)},
+                        {text: '下经（第 31–64 卦）', collapsed: true, items: guaItems(31, 64)},
+                    ]
                 },
                 {
                     text: '十翼', collapsed: false,
@@ -790,7 +855,7 @@ export default defineConfig({
                         {text: '六爻', link: '/divination/liuyao'},
                         {text: '梅花易数', link: '/divination/meihua'},
                     ]
-                }
+                },
             ]
 
         },
