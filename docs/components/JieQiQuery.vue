@@ -160,6 +160,15 @@
       <div class="empty-decoration"></div>
     </div>
 
+    <!-- 接着用：常驻区块，无论是否已出结果都可见 -->
+    <div class="next-links">
+      <span class="next-label">接着用：</span>
+      <a :href="withBase('/fate/query/baziQuery')" target="_blank" rel="noreferrer">八字查询</a>
+      <a :href="withBase('/fate/query/taisuiQuery')" target="_blank" rel="noreferrer">太岁查询</a>
+      <a :href="withBase('/fate/dayun')" target="_blank" rel="noreferrer">读《大运与流年》</a>
+      <a :href="withBase('/fate/ganzhi')" target="_blank" rel="noreferrer">读《天干地支》</a>
+    </div>
+
     <!-- 页脚 -->
     <div class="footer">
       <div class="footer-content">
@@ -173,6 +182,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import SolarTerm from '../utils/SolarTerm.js';
+import { withBase } from 'vitepress';
 
 const solarTerm = new SolarTerm();
 
@@ -930,6 +940,35 @@ onMounted(() => {
 }
 
 /* 页脚 */
+.next-links {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bz-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: var(--bz-fs-2);
+}
+
+.next-label {
+  color: var(--bz-text-3);
+}
+
+.next-links a {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--bz-blue-tint);
+  color: var(--bz-blue-fg-vivid-mid);
+  text-decoration: none;
+  border: 1px solid var(--bz-blue-border-alt);
+  transition: background 0.15s;
+}
+
+.next-links a:hover {
+  background: var(--bz-blue-tint-2);
+}
+
 .footer {
   text-align: center;
   padding: 36px 20px;

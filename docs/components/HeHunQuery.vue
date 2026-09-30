@@ -450,6 +450,16 @@
       </button>
     </div>
 
+    <!-- 接着用：常驻区块，无论是否已出结果都可见 -->
+    <div class="next-links">
+      <span class="next-label">接着用：</span>
+      <a :href="withBase('/fate/query/baziQuery')" target="_blank" rel="noreferrer">八字查询</a>
+      <a :href="withBase('/fate/query/jieqiQuery')" target="_blank" rel="noreferrer">节气查询</a>
+      <a :href="withBase('/fate/query/taisuiQuery')" target="_blank" rel="noreferrer">太岁查询</a>
+      <a :href="withBase('/fate/hehun')" target="_blank" rel="noreferrer">读《合婚》</a>
+      <a :href="withBase('/fate/dizhi-relation')" target="_blank" rel="noreferrer">读《地支合冲刑害》</a>
+    </div>
+
     <!-- 页脚 -->
     <div class="footer">
       <p>八字合婚参考 · 传统文化知识整理 · 不作预测承诺</p>
@@ -461,6 +471,7 @@
 import { ref, reactive, computed, onMounted } from 'vue';
 import SolarTerm from '../utils/SolarTerm.js';
 import HeHun from '../utils/hehunUtils.js';
+import { withBase } from 'vitepress';
 
 const solarTerm = new SolarTerm();
 
@@ -1194,6 +1205,35 @@ onMounted(() => {
   display: inline-flex; align-items: center; gap: 8px; transition: background-color .25s ease;
 }
 .demo-btn:hover { background: var(--bz-blue-tint); }
+
+.next-links {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bz-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: var(--bz-fs-2);
+}
+
+.next-label {
+  color: var(--bz-text-3);
+}
+
+.next-links a {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--bz-blue-tint);
+  color: var(--bz-blue-fg-vivid-mid);
+  text-decoration: none;
+  border: 1px solid var(--bz-blue-border-alt);
+  transition: background 0.15s;
+}
+
+.next-links a:hover {
+  background: var(--bz-blue-tint-2);
+}
 
 .footer {
   text-align: center; padding: 20px; color: var(--bz-blue-fg-soft); font-size: var(--bz-fs-2);

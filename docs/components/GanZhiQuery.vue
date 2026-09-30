@@ -24,10 +24,16 @@
                   v-model="inputDate"
                   placeholder="请选择日期"
                   class="date-input"
+                  :min="MIN_DATE"
+                  :max="MAX_DATE"
                   @change="updateDateTime"
               />
               <i class="icon-date"></i>
             </div>
+            <p class="field-hint">
+              支持 {{ MIN_DATE }} 至 {{ MAX_DATE }}。此范围由日柱查表与节气算法的可算区间决定，
+              超出后结果不可信，故不予提供。
+            </p>
           </div>
 
           <div class="form-group">
@@ -217,21 +223,28 @@
         <div class="result-datetime">
           <div>{{ formatDate(inputDate) }}</div>
           <div class="result-time">{{ formatTime(inputTime) }}</div>
+          <div class="result-shift" v-if="effectiveDateNote">{{ effectiveDateNote }}</div>
         </div>
       </div>
 
       <!-- 结果分栏：四柱 / 结构 / 时间 / 论断 / 推演 —— 共用同一次排盘结果 -->
-      <div class="result-tabs">
+      <div class="result-tabs" role="tablist" aria-label="排盘结果分栏">
         <button
             v-for="t in resultTabs"
+            :id="'tab-' + t.key"
             :key="t.key"
+            role="tab"
+            :aria-selected="activeTab === t.key"
+            :aria-controls="'panel-' + t.key"
+            :tabindex="activeTab === t.key ? 0 : -1"
             class="result-tab"
             :class="{ active: activeTab === t.key }"
-            @click="activeTab = t.key"
+            @click="setTab(t.key)"
+            @keydown="onTabKeydown($event, t.key)"
         >{{ t.label }}</button>
       </div>
 
-      <div v-show="activeTab === 'pillar'">
+      <div v-show="activeTab === 'pillar'" id="panel-pillar" role="tabpanel" aria-labelledby="tab-pillar" tabindex="0">
       <!-- 生肖和干支概览 -->
       <div class="overview-section">
         <div class="zodiac-badge">
@@ -245,7 +258,9 @@
 
       <!-- 日主与旺衰 -->
       <div class="analysis-section" v-if="analysis">
-        <h3 class="section-title">日主与旺衰</h3>
+        <h3 class="section-title">日主与旺衰
+          <a class="sec-link" :href="withBase('/fate/wangshuai')" target="_blank" rel="noreferrer">详见《日主旺衰》的得令 / 得地 / 得势</a>
+        </h3>
 
         <div class="day-master-card">
           <div class="dm-badge">
@@ -365,7 +380,9 @@
 
       <!-- 四柱十神信息 -->
       <div class="detail-section">
-        <h3 class="section-title">四柱十神</h3>
+        <h3 class="section-title">四柱十神
+          <a class="sec-link" :href="withBase('/fate/shishen')" target="_blank" rel="noreferrer">详见《十神》</a>
+        </h3>
 
         <div class="info-grid">
           <div class="info-item" v-for="item in infoItems" :key="item.key">
@@ -391,7 +408,9 @@
 
       <!-- 地支藏干 - 网格布局 -->
       <div v-if="hasHideDzGods" class="hide-gods-section">
-        <h3 class="section-title">地支藏干</h3>
+        <h3 class="section-title">地支藏干
+          <a class="sec-link" :href="withBase('/fate/ganzhi')" target="_blank" rel="noreferrer">详见《天干地支》的地支藏干</a>
+        </h3>
         <div class="hide-gods-grid">
           <!-- 年柱藏干 -->
           <div class="hide-gods-column" v-if="resultInfo.yearHideDzGods?.length">
@@ -485,7 +504,9 @@
 
       <!-- 五行分布 -->
       <div class="analysis-section" v-if="analysis">
-        <h3 class="section-title">五行分布</h3>
+        <h3 class="section-title">五行分布
+          <a class="sec-link" :href="withBase('/fate/wuxing')" target="_blank" rel="noreferrer">详见《五行》</a>
+        </h3>
         <div class="element-chart">
           <div class="element-row" v-for="el in analysis.elements.list" :key="'el-' + el.name">
             <span class="el-name" :class="'el-' + el.name">{{ el.name }}</span>
@@ -523,7 +544,9 @@
 
       <!-- 空亡 -->
       <div class="analysis-section" v-if="analysis && analysis.xunKong">
-        <h3 class="section-title">空亡（旬空）</h3>
+        <h3 class="section-title">空亡（旬空）
+          <a class="sec-link" :href="withBase('/fate/kongwang')" target="_blank" rel="noreferrer">详见《空亡》</a>
+        </h3>
         <div class="kong-line">
           <span class="kong-xun">{{ analysis.xunKong.xunHead }}旬</span>
           <span class="kong-arrow">空</span>
@@ -573,12 +596,12 @@
       </div><!-- /四柱 tab -->
 
       <!-- 结构 tab：全盘刑冲合害 · 透干 · 通根 -->
-      <div v-show="activeTab === 'structure'">
+      <div v-show="activeTab === 'structure'" id="panel-structure" role="tabpanel" aria-labelledby="tab-structure" tabindex="0">
         <BaziStructure :structure="analysis && analysis.structure" />
       </div>
 
       <!-- 时间 tab：大运 · 流年 · 流月 · 引动点 -->
-      <div v-show="activeTab === 'time'">
+      <div v-show="activeTab === 'time'" id="panel-time" role="tabpanel" aria-labelledby="tab-time" tabindex="0">
         <BaziTimeline
             :result="resultInfo"
             :analysis="analysis"
@@ -587,12 +610,12 @@
       </div>
 
       <!-- 论断 tab：格局取法 · 用神三法 —— 判断层，诸说并列，不给单一结论 -->
-      <div v-show="activeTab === 'judgment'">
+      <div v-show="activeTab === 'judgment'" id="panel-judgment" role="tabpanel" aria-labelledby="tab-judgment" tabindex="0">
         <BaziJudgment :judgment="analysis && analysis.judgment" />
       </div>
 
       <!-- 推演 tab：格局成破 · 用神落点 · 十神引动 —— 争议最大的一层，只作对应不下吉凶 -->
-      <div v-show="activeTab === 'inference'">
+      <div v-show="activeTab === 'inference'" id="panel-inference" role="tabpanel" aria-labelledby="tab-inference" tabindex="0">
         <BaziInference
             :inference="analysis && analysis.inference"
             :analysis="analysis"
@@ -602,28 +625,38 @@
       </div>
 
       <!-- 导读 tab：把前五栏的结论翻成白话，归到财 / 婚 / 事业 / 健康四题（翻译层，不下结论） -->
-      <div v-show="activeTab === 'guide'">
+      <div v-show="activeTab === 'guide'" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide" tabindex="0">
         <BaziGuide :guide="analysis && analysis.guide" />
       </div>
 
       <!-- 操作按钮 -->
       <div class="action-section">
-        <button @click="clearResult" class="clear-btn">
+        <button @click="clearResult" class="clear-btn" title="把输入还原为示例日期，并重新排盘">
           <i class="icon-refresh"></i>
-          重新查询
+          重置为示例
         </button>
-        <button @click="setCurrentTime" class="current-time-btn">
+        <button @click="setCurrentTime" class="current-time-btn" title="只把时间改为当前时刻，日期不变">
           <i class="icon-clock"></i>
-          当前时间
+          时刻改为现在
         </button>
         <button @click="copyShareLink" class="share-btn" :class="{ done: shareCopied }">
           <i class="icon-link"></i>
           {{ shareCopied ? '已复制链接' : '复制分享链接' }}
         </button>
       </div>
+      <!-- 四个查询工具此前互不跳转（href 数都是 0），此处补上出口 -->
+      <div class="next-links">
+        <span class="next-label">接着用：</span>
+        <a :href="withBase('/fate/query/hehunQuery')" target="_blank" rel="noreferrer">八字合婚查询</a>
+        <a :href="withBase('/fate/query/taisuiQuery')" target="_blank" rel="noreferrer">太岁查询</a>
+        <a :href="withBase('/fate/query/jieqiQuery')" target="_blank" rel="noreferrer">节气查询</a>
+        <a :href="withBase('/fate/piming')" target="_blank" rel="noreferrer">读《八字怎么批》</a>
+      </div>
+
       <p class="share-hint">
-        分享链接只记录<strong>出生信息与排盘口径</strong>（日期 / 时间 / 性别 / 出生地 / 真太阳时 / 子时约定），
-        四柱由这些输入重算 —— 把口径一并带上，对方打开才会得到同一张盘。
+        分享链接只记录<strong>出生信息与排盘口径</strong>（日期 / 时间 / 性别 / 出生地 / 真太阳时 / 子时约定）
+        以及<strong>当前所在分栏</strong>，四柱由这些输入重算 ——
+        把口径一并带上，对方打开才会得到同一张盘的同一栏。
       </p>
     </div>
 
@@ -646,7 +679,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, nextTick } from 'vue';
+import { withBase } from 'vitepress';
 import SolarTerm from '../utils/SolarTerm.js';
 import Bazi from '../utils/baziUtils.js';
 import {
@@ -671,6 +705,16 @@ import BaziGuide from './BaziGuide.vue';
  */
 const DEFAULT_DATE = '1994-12-13';
 const DEFAULT_TIME = '12:00';
+
+/**
+ * 排盘可算范围。
+ * 下限是日柱查表算法的真实边界：日柱以 1899-12-21（甲子日）为起算点，
+ * 故 1899-12-22 起才有数据；更早取不到日柱，会抛内部异常。
+ * 上限是「给活人排盘」的合理窗口：超出后节气算法不报错、但结果已不可信，
+ * 一并拦下，免得静默给出一张看着正常的错盘。
+ */
+const MIN_DATE = '1899-12-22';
+const MAX_DATE = '2100-12-31';
 
 // 响应式数据
 const inputDate = ref(DEFAULT_DATE);
@@ -752,7 +796,9 @@ const solarOptions = [
 const longitude = computed(() => {
   if (cityValue.value === '__custom__') {
     const v = Number(customLongitude.value);
-    return isFinite(v) && v > 0 && v < 180 ? v : null;
+    // 与输入框的 min=70 / max=140 保持一致（中国经度约 73–135°E）。
+    // 两处口径不同会出现「界面标记非法、代码却照收」的矛盾态。
+    return isFinite(v) && v >= 70 && v <= 140 ? v : null;
   }
   if (!cityValue.value) return null;
   const v = cityLongitude[cityValue.value];
@@ -771,6 +817,19 @@ const birthPlaceText = computed(() => {
 const ziConventionDetail = computed(() => {
   const hit = ziConventions.find(z => z.value === ziConvention.value);
   return hit ? hit.detail : '';
+});
+
+/**
+ * 排盘实际用的日期与「输入日期」不一致时的提示。
+ * 真太阳时、或子时归次日，都可能把日期推后一天；此时结果头若只显示输入日期，
+ * 就会出现「头部写 12-13、日柱却是 12-14」的对不上。
+ */
+const effectiveDateNote = computed(() => {
+  const m = moment.value;
+  if (!m || !m.effectiveStr) return '';
+  const eff = String(m.effectiveStr).slice(0, 10);
+  if (!eff || eff === inputDate.value) return '';
+  return '排盘用 ' + eff;
 });
 
 /**
@@ -1100,6 +1159,13 @@ const queryGanZhi = () => {
     errorMsg.value = '请先选择查询日期';
     return;
   }
+  // 范围校验放在这里而不是只靠 input 的 min/max —— 手输年份、分享链接、
+  // 以及不遵守 min/max 的环境都绕得过属性校验。
+  // 日期串是补零的 YYYY-MM-DD，字典序即时间序，可直接比大小。
+  if (inputDate.value < MIN_DATE || inputDate.value > MAX_DATE) {
+    errorMsg.value = `出生日期超出可计算范围（${MIN_DATE} 至 ${MAX_DATE}），请检查年份是否填错。`;
+    return;
+  }
   errorMsg.value = '';
 
   // 如果没有选择时间，使用默认时间
@@ -1165,7 +1231,14 @@ const queryGanZhi = () => {
     analysis.value = null;
     moment.value = null;
     shiftedInfo.value = null;
-    errorMsg.value = `查询失败：${err.message || err}`;
+    // 不把内部异常原文（形如「xxx.substring is not a function」）弹给用户看：
+    // 那种文字既看不懂、也暴露实现细节。详细信息留在控制台，界面只给能照做的一句。
+    if (typeof console !== 'undefined' && console.error) {
+      console.error('[八字排盘] 失败：', err);
+    }
+    errorMsg.value =
+      `排盘失败。请确认出生日期在 ${MIN_DATE} 至 ${MAX_DATE} 之间；`
+      + '若日期无误仍失败，可能是该日期的历法数据暂缺。';
   }
 };
 
@@ -1182,7 +1255,9 @@ const currentShareState = () => ({
   city: cityValue.value,
   longitude: longitude.value,
   trueSolar: useTrueSolar.value,
-  ziConvention: ziConvention.value
+  ziConvention: ziConvention.value,
+  // 当前分栏也编进去，否则分享链接永远落在「四柱」栏
+  tab: activeTab.value
 });
 
 /** 把当前输入写进地址栏（replaceState，不新增历史记录、不触发路由跳转） */
@@ -1221,6 +1296,37 @@ const copyShareLink = () => {
   }
 };
 
+/**
+ * 切换结果分栏，并把当前栏写回地址栏。
+ * 不给个入口的话，分享链接永远指向「四柱」，想单发某一栏（例如「格局」）做不到。
+ */
+const setTab = (key) => {
+  if (activeTab.value === key) return;
+  activeTab.value = key;
+  syncShareUrl();
+};
+
+/**
+ * tablist 的键盘惯例：左右箭头在分栏之间移动、Home/End 跳首末。
+ * 焦点要跟着走，否则读屏用户按了右键听到的仍是同一栏。
+ */
+const onTabKeydown = (e, key) => {
+  const keys = resultTabs.map(t => t.key);
+  const i = keys.indexOf(key);
+  let next = null;
+  if (e.key === 'ArrowRight') next = keys[(i + 1) % keys.length];
+  else if (e.key === 'ArrowLeft') next = keys[(i - 1 + keys.length) % keys.length];
+  else if (e.key === 'Home') next = keys[0];
+  else if (e.key === 'End') next = keys[keys.length - 1];
+  if (!next) return;
+  e.preventDefault();
+  setTab(next);
+  nextTick(() => {
+    const el = document.getElementById('tab-' + next);
+    if (el) el.focus();
+  });
+};
+
 /** 从地址栏还原输入与口径；返回是否真的解出了参数 */
 const applyShareParams = () => {
   if (typeof window === 'undefined' || !window.location) return false;
@@ -1247,6 +1353,8 @@ const applyShareParams = () => {
   }
   if (s.trueSolar !== undefined) useTrueSolar.value = s.trueSolar;
   if (s.ziConvention) ziConvention.value = s.ziConvention;
+  // 分栏深链：白名单以 resultTabs 为准（那是渲染时的权威清单），非法值静默落回默认栏
+  if (s.tab && resultTabs.some(t => t.key === s.tab)) activeTab.value = s.tab;
   return true;
 };
 
@@ -1266,7 +1374,54 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>.ganzhi-container {
+<style scoped>
+/* ===== 本轮新增：术语内联链接 / 排盘日期提示 / 工具出口 ===== */
+.sec-link {
+  margin-left: 10px;
+  font-size: var(--bz-fs-2);
+  font-weight: 400;
+  color: var(--bz-blue-fg-vivid-mid);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--bz-blue-border-2-alt);
+  white-space: nowrap;
+}
+
+.result-shift {
+  margin-top: 4px;
+  font-size: var(--bz-fs-2);
+  color: var(--bz-warn-text);
+}
+
+.next-links {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bz-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: var(--bz-fs-2);
+}
+
+.next-label {
+  color: var(--bz-text-3);
+}
+
+.next-links a {
+  padding: 4px 12px;
+  border-radius: 12px;
+  background: var(--bz-blue-tint);
+  color: var(--bz-blue-fg-vivid-mid);
+  text-decoration: none;
+  border: 1px solid var(--bz-blue-border-alt);
+  transition: background 0.15s;
+}
+
+.next-links a:hover {
+  background: var(--bz-blue-tint-2);
+}
+
+.ganzhi-container {
   /* 断点按组件自身宽度判定，而非视口 —— 正文区被侧栏挤压时也能正确塌陷 */
   container-type: inline-size;
   container-name: gz;

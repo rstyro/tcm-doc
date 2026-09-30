@@ -541,6 +541,7 @@ export default defineConfig({
                     {text: '命理师', link: '/fate/what'},
                     {text: '天干地支', link: '/fate/ganzhi'},
                     {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
+                    {text: '空亡', link: '/fate/kongwang'},
                     {text: '八字', link: '/fate/bazi'},
                     {text: '日主旺衰', link: '/fate/wangshuai'},
                     {text: '命盘实例', link: '/fate/shili'},
@@ -777,6 +778,7 @@ export default defineConfig({
                     items: [
                         {text: '天干地支', link: '/fate/ganzhi'},
                         {text: '地支合冲刑害', link: '/fate/dizhi-relation'},
+                        {text: '空亡', link: '/fate/kongwang'},
                         {text: '纳音', link: '/fate/nayin'},
                         {text: '神煞', link: '/fate/shensha'},
                     ]

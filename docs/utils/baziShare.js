@@ -9,6 +9,7 @@
  *   lng 经度（可选，用于真太阳时）
  *   ts  是否启用真太阳时（1 / 0）
  *   zi  子时约定（nextDay / lateZi）
+ *   tab 结果分栏（pillar / structure / …，可选）
  *
  * 设计取舍：
  * - **不编码四柱本身**，只编码输入。四柱是排盘的产物，重算一次比存一份更可靠；
@@ -17,7 +18,14 @@
  * - 纯函数，不碰 `window` / `location`，便于单测；取用当前地址由调用点负责。
  */
 
-export const SHARE_KEYS = ['d', 't', 'g', 'c', 'lng', 'ts', 'zi'];
+export const SHARE_KEYS = ['d', 't', 'g', 'c', 'lng', 'ts', 'zi', 'tab'];
+
+/**
+ * 允许深链的结果分栏，与 `GanZhiQuery.vue` 的 `resultTabs` 键一一对应。
+ * 那张表才是渲染时的权威清单；此处只用于 URL 卫生，挡掉手工构造的垃圾值。
+ * 将来增删分栏，两处要一起改。
+ */
+export const SHARE_TAB_KEYS = ['pillar', 'structure', 'time', 'judgment', 'inference', 'guide'];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const TIME_RE = /^\d{1,2}:\d{2}$/;
@@ -27,11 +35,11 @@ const roundLng = (v) => Math.round(Number(v) * 100) / 100;
 
 /**
  * 输入状态 → query 串（不带 `?`）。空值项一律省略，链接尽量短。
- * @param {Object} state { date, time, gender, city, longitude, trueSolar, ziConvention }
+ * @param {Object} state { date, time, gender, city, longitude, trueSolar, ziConvention, tab }
  * @returns {string} 形如 `d=1994-12-13&t=12%3A00&g=m`；无可编码项时返回 ''
  */
 export const buildShareQuery = (state = {}) => {
-  const { date, time, gender, city, longitude, trueSolar, ziConvention } = state;
+  const { date, time, gender, city, longitude, trueSolar, ziConvention, tab } = state;
   const p = new URLSearchParams();
 
   if (date && DATE_RE.test(String(date))) p.set('d', String(date));
@@ -43,6 +51,8 @@ export const buildShareQuery = (state = {}) => {
   }
   p.set('ts', trueSolar ? '1' : '0');
   if (ziConvention) p.set('zi', String(ziConvention));
+  // 分栏也编进去：分享「格局」那一栏时，对方打开应落在同一栏
+  if (tab && SHARE_TAB_KEYS.includes(String(tab))) p.set('tab', String(tab));
 
   return p.toString();
 };
@@ -90,6 +100,9 @@ export const parseShareQuery = (search = '') => {
   const zi = p.get('zi');
   if (zi && (zi === 'nextDay' || zi === 'lateZi')) out.ziConvention = zi;
 
+  const tab = p.get('tab');
+  if (tab && SHARE_TAB_KEYS.includes(tab)) out.tab = tab;
+
   return Object.keys(out).length ? out : null;
 };
 
@@ -98,6 +111,7 @@ export const hasShareParams = (search = '') => parseShareQuery(search) !== null;
 
 export default {
   SHARE_KEYS,
+  SHARE_TAB_KEYS,
   buildShareQuery,
   parseShareQuery,
   hasShareParams
