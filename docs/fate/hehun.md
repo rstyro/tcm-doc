@@ -108,5 +108,5 @@
 ## 延伸阅读
 
 - 本站基础：《[天干地支](/fate/ganzhi)》《[地支关系：合冲刑害](/fate/dizhi-relation)》《[五行](/fate/wuxing)》《[纳音](/fate/nayin)》。
-- 八字进阶：《[日主旺衰](/fate/wangshuai)》《[用神](/fate/yongshen)》《[八字怎么批](/fate/piming)》；一张完整命盘的推演过程见《[命盘实例](/fate/shili)》。
+- 八字进阶：《[日主旺衰](/fate/wangshuai)》《[用神](/fate/yongshen)》《[八字怎么批](/fate/piming)》；一张完整命盘的推演过程见《[命盘实例](/fate/shili/)》。
 - 在线工具：[八字合婚查询](/fate/query/hehunQuery)（逐项比对）；单独排盘可用[八字查询工具](/fate/query/baziQuery)。

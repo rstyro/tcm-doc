@@ -134,5 +134,5 @@
 
 ## 延伸阅读
 
-- 流程总述：《[八字怎么批](/fate/piming)》；推演导览与另一例：《[命盘实例](/fate/shili)》《[实例二：辛金生卯月](/fate/shili/example2)》。
+- 流程总述：《[八字怎么批](/fate/piming)》；推演导览与另一例：《[命盘实例](/fate/shili/)》《[实例二：辛金生卯月](/fate/shili/example2)》。
 - 各环节专页：《[八字基础](/fate/bazi)》《[十神](/fate/shishen)》《[日主旺衰](/fate/wangshuai)》《[格局](/fate/geju)》《[用神](/fate/yongshen)》《[大运与流年](/fate/dayun)》《[地支关系](/fate/dizhi-relation)》。
